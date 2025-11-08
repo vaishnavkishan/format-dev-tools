@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Format Dev-Tools innovative icon (dark theme, JSON + formatting concept) -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-labelledby="title desc">
+  <title id="title">Format Dev-Tools Icon</title>
+  <desc id="desc">Abstract JSON-inspired icon showing curved braces and formatting flow, in teal #13ecec on a dark background.</desc>
+
+  <!-- Background -->
+  <rect x="10" y="10" width="100" height="100" rx="20" fill="#121212" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+
+  <!-- Subtle inner glow -->
+  <circle cx="60" cy="60" r="46" fill="none" stroke="rgba(19,236,236,0.08)" stroke-width="6"/>
+
+  <!-- Left curly brace -->
+  <path d="M42,30 
+           C30,38 30,82 42,90" 
+        fill="none" stroke="#13ecec" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Right curly brace -->
+  <path d="M78,30 
+           C90,38 90,82 78,90" 
+        fill="none" stroke="#13ecec" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Central flow lines (symbolizing alignment / formatting) -->
+  <path d="M54 45 L66 45 M50 60 L70 60 M54 75 L66 75"
+        stroke="#13ecec"
+        stroke-width="3"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        opacity="0.9"/>
+
+  <!-- Accent dots (symbolize structured data points) -->
+  <circle cx="60" cy="60" r="2" fill="#13ecec"/>
+  <circle cx="54" cy="45" r="1.6" fill="#13ecec"/>
+  <circle cx="66" cy="75" r="1.6" fill="#13ecec"/>
+</svg>
