@@ -21,9 +21,11 @@ interface JsonInputProps {
   onFocus?: () => void;
   onBlur?: () => void;
   isFocused?: boolean;
+  isError?: boolean;
   onClear: () => void;
   inputRef: Ref<HTMLTextAreaElement | null>;
 }
+const MotionJsonTextareaWrapper = motion(JsonTextareaWrapper);
 
 export default function JsonInput({
   value,
@@ -38,18 +40,17 @@ export default function JsonInput({
   inputRef,
 }: JsonInputProps) {
   const theme = useTheme();
-  const MotionJsonTextareaWrapper = motion(JsonTextareaWrapper);
+
+  const boxColor = error
+    ? theme.palette.error.main
+    : theme.palette.primary.main;
   return (
     <MotionJsonTextareaWrapper
       initial={{
-        boxShadow: isFocused
-          ? `${theme.palette.primary.main} 0px 0px 3px 1px`
-          : "none",
+        boxShadow: isFocused ? `${boxColor} 0px 0px 3px 1px` : "none",
       }}
       animate={{
-        boxShadow: isFocused
-          ? `${theme.palette.primary.main} 0px 0px 10px 1px`
-          : "none",
+        boxShadow: isFocused ? `${boxColor} 0px 0px 10px 1px` : "none",
       }}
       transition={{
         duration: 0.5,
@@ -59,9 +60,7 @@ export default function JsonInput({
       }}
       id="json-input-wrapper"
       sx={{
-        boxShadow: isFocused
-          ? `${theme.palette.primary.main} 0px 0px 5px 3px`
-          : "none",
+        boxShadow: isFocused ? `${boxColor} 0px 0px 5px 3px` : "none",
       }}
       onClick={onFocus}
     >
@@ -69,13 +68,17 @@ export default function JsonInput({
         id="json-input-textarea"
         inputRef={inputRef}
         multiline
-        rows={30}
+        minRows={30}
+        maxRows={60}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         onFocus={onFocus}
         onBlur={onBlur}
         placeholder="Paste your raw JSON here..."
-        error={error} // MUI handles red border automatically
+        tabIndex={0}
+        sx={{
+          flexGrow: "inherit",
+        }}
       />
       <ActionButtons>
         <Tooltip title="Paste from clipboard" arrow>

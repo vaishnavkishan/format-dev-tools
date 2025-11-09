@@ -15,8 +15,9 @@ interface JsonOutputProps {
   onCopy: (val: string) => void;
   onFocus?: () => void;
   onBlur?: () => void;
+  onError: () => void;
   isFocused?: boolean;
-  height?: number;
+  // height?: number;
 }
 
 export default function JsonOutput({
@@ -25,8 +26,9 @@ export default function JsonOutput({
   onFocus,
   isFocused,
   onBlur,
-  height,
-}: JsonOutputProps) {
+  onError,
+}: // height,
+JsonOutputProps) {
   const formattedInput = formatJson(input);
   const theme = useTheme();
   const MotionJsonTextareaWrapper = motion(JsonTextareaWrapper);
@@ -50,9 +52,7 @@ export default function JsonOutput({
         repeat: Infinity,
       }}
       sx={{
-        overflow: "auto",
-        flex: 1,
-        height: `${height}px`,
+        // height: `${height}px`,
         boxShadow: isFocused
           ? `${theme.palette.warning.main} 0px 0px 5px 3px`
           : "none",
@@ -62,7 +62,8 @@ export default function JsonOutput({
     >
       <JsonOutputArea
         sx={{
-          minHeight: 200,
+          // minHeight: 200,
+          flexGrow: "inherit",
         }}
         dangerouslySetInnerHTML={{
           __html: input
@@ -92,14 +93,14 @@ export default function JsonOutput({
       </ToolBar>
     </MotionJsonTextareaWrapper>
   );
-}
-
-function formatJson(jsonString: string): string {
-  try {
-    const parsed = JSON.parse(jsonString);
-    return JSON.stringify(parsed, null, 2);
-  } catch {
-    return "";
+  function formatJson(jsonString: string): string {
+    try {
+      const parsed = JSON.parse(jsonString);
+      return JSON.stringify(parsed, null, 2);
+    } catch {
+      onError();
+      return "";
+    }
   }
 }
 

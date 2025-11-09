@@ -6,8 +6,9 @@ export const JsonTextareaWrapper = styled(Box)(() => ({
   position: "relative",
   flex: 1,
   margin: 8,
-  height: 800,
-  minHeight: 200,
+  //   height: 800,
+  //   minHeight: 200,
+  overflow: "hidden", // clip inner scroll
   display: "flex",
   flexDirection: "column",
   borderRadius: 15,
@@ -26,10 +27,13 @@ export const JsonTextarea = styled(InputBase)(({ theme }) => ({
   fontFamily: "'Fira Code', monospace",
   fontSize: 16,
   padding: "16px",
-  overflow: "scroll",
+  overflow: "auto",
   lineHeight: "1.5",
+  flex: 1,
   "& .MuiInputBase-input": {
     padding: 0,
+    height: "100%", // fill wrapper
+    overflow: "auto", // enable scrolling
   },
   "&::placeholder": {
     color: theme.palette.text.secondary,

@@ -22,6 +22,7 @@ A json formatter/validator that does it locally without sending data anywhere.
   - Output full screen
   - Both full screen?
 - Expand input or output (like 70% - 30% width to input or output)
+- Focus mode - no animation, small font size, full screen, etc. Save it in localstorage
 
 # Learnings
 

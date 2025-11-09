@@ -12,6 +12,7 @@ type FocusTarget = "none" | "input" | "output";
 
 export default function App() {
   const [smallTitle, setSmallTitle] = useState(false);
+  const [error, setError] = useState(false);
   // const [inputHeight, setInputHeight] = useState(400);
   const [isFocused, setIsFocused] = useState<FocusTarget>("none");
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
@@ -61,14 +62,16 @@ export default function App() {
   );
   function main() {
     return (
-      <Grid container justifyContent="center" spacing={2}>
+      <Grid container justifyContent="center" spacing={2} alignItems="stretch">
         <Grid size={{ xs: 12, sm: 6 }} display="flex" flexDirection="column">
           <JsonInput
             inputRef={inputRef}
             value={input}
+            error={error}
             isFocused={isFocused == "input"}
             onPaste={handlePaste}
             onChange={(newValue: string) => {
+              setError(false);
               setInput(newValue);
             }}
             onFocus={() => handleFocus("input")}
@@ -80,7 +83,7 @@ export default function App() {
             }}
           />
         </Grid>
-        <Grid size={{ xs: 12, sm: 6 }} flexGrow={1}>
+        <Grid size={{ xs: 12, sm: 6 }} display="flex" flexDirection="column">
           <JsonOutput
             // height={inputHeight}
             value={input}
@@ -88,6 +91,7 @@ export default function App() {
             onBlur={handleBlur}
             onCopy={handleCopy}
             onFocus={() => handleFocus("output")}
+            onError={handleError}
           />
         </Grid>
       </Grid>
@@ -97,6 +101,7 @@ export default function App() {
     try {
       const text = await navigator.clipboard.readText();
       setInput(text);
+      setError(false);
     } catch (err) {
       console.error("Failed to read clipboard: ", err);
     }
@@ -121,5 +126,8 @@ export default function App() {
   }
   function handleBlur() {
     setIsFocused("none");
+  }
+  function handleError() {
+    setError(true);
   }
 }
