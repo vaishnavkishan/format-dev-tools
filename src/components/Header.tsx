@@ -31,8 +31,10 @@ function BigScreenHeader({ shrink }: { shrink: boolean }) {
         {
           display: shrink ? "none" : "block",
           y: shrink ? -10 : 0,
+          height: shrink ? 0 : 10,
+          opacity: shrink ? 0 : 1,
         },
-        { duration: 0.4, ease: "easeInOut" }
+        { duration: 0.4, ease: "easeOut" }
       );
       await wrapperControls.start(
         {
@@ -66,27 +68,22 @@ function BigScreenHeader({ shrink }: { shrink: boolean }) {
       }}
       style={{
         display: "flex",
+        flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        gap: 16,
       }}
     >
-      {/* Logo */}
-      <motion.img
-        src={Logo}
-        alt="Logo"
-        animate={logoControls}
-        initial={false}
-        style={{ width: "auto", objectFit: "contain" }}
-      />
-
-      {/* Title + Subtitle */}
-      <Box
-        display="flex"
-        flexDirection="column"
-        alignItems="flex-start"
-        gap={0.5}
-      >
+      <Box display="flex" flexDirection="row" alignItems="center" gap={0.5}>
+        {/* Logo */}
+        <motion.img
+          src={Logo}
+          alt="Logo"
+          animate={logoControls}
+          initial={{
+            height: initialLogoHeight,
+          }}
+          style={{ width: "auto", objectFit: "contain" }}
+        />
         {/* Animate font size of title */}
         <Box>
           <Typography
@@ -100,7 +97,10 @@ function BigScreenHeader({ shrink }: { shrink: boolean }) {
             Format Dev-Tools
           </Typography>
         </Box>
+      </Box>
 
+      {/* Title + Subtitle */}
+      <Box>
         {/* Animate subtitle with fade + slide */}
         <motion.div
           key="subtitle"
