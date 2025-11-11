@@ -6,7 +6,7 @@ import { ThemeProvider } from "@emotion/react";
 import { theme } from "./brand.ts";
 import { CssBaseline } from "@mui/material";
 import Loader from "./components/Loader.tsx";
-import { ToastProvider } from "./components/ToastContext.tsx";
+import { ToastProvider } from "./contexts/ToastContext.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

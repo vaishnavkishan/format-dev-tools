@@ -17,7 +17,6 @@ interface JsonOutputProps {
   onBlur?: () => void;
   onError: () => void;
   isFocused?: boolean;
-  // height?: number;
 }
 
 export default function JsonOutput({
@@ -27,8 +26,7 @@ export default function JsonOutput({
   isFocused,
   onBlur,
   onError,
-}: // height,
-JsonOutputProps) {
+}: JsonOutputProps) {
   const formattedInput = formatJson(input);
   const theme = useTheme();
   const MotionJsonTextareaWrapper = motion(JsonTextareaWrapper);
@@ -52,7 +50,7 @@ JsonOutputProps) {
         repeat: Infinity,
       }}
       sx={{
-        // height: `${height}px`,
+        maxHeight: "80vh",
         boxShadow: isFocused
           ? `${theme.palette.warning.main} 0px 0px 5px 3px`
           : "none",
@@ -62,7 +60,6 @@ JsonOutputProps) {
     >
       <JsonOutputArea
         sx={{
-          // minHeight: 200,
           flexGrow: "inherit",
         }}
         dangerouslySetInnerHTML={{

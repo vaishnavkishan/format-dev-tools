@@ -1,16 +1,11 @@
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import CloseIcon from "@mui/icons-material/Close";
 import { ContentPaste } from "@mui/icons-material";
-import {
-  ActionButtons,
-  CustomIconButton,
-  JsonTextarea,
-  JsonTextareaWrapper,
-  ToolBar,
-} from "./JsonControl.styles";
+import * as JsonControlStyles from "./JsonControl.styles";
 import { type Ref } from "react";
 import { Tooltip, useTheme } from "@mui/material";
 import { motion } from "framer-motion";
+import { JsonTextArea } from "./JsonControl.styles";
 
 interface JsonInputProps {
   value: string;
@@ -25,7 +20,7 @@ interface JsonInputProps {
   onClear: () => void;
   inputRef: Ref<HTMLTextAreaElement | null>;
 }
-const MotionJsonTextareaWrapper = motion(JsonTextareaWrapper);
+const MotionJsonTextareaWrapper = motion(JsonControlStyles.JsonTextareaWrapper);
 
 export default function JsonInput({
   value,
@@ -37,7 +32,6 @@ export default function JsonInput({
   isFocused,
   onCopy,
   onClear,
-  inputRef,
 }: JsonInputProps) {
   const theme = useTheme();
 
@@ -64,53 +58,47 @@ export default function JsonInput({
       }}
       onClick={onFocus}
     >
-      <JsonTextarea
+      <JsonTextArea
         id="json-input-textarea"
-        inputRef={inputRef}
-        multiline
-        minRows={30}
-        maxRows={60}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         onFocus={onFocus}
         onBlur={onBlur}
         placeholder="Paste your raw JSON here..."
         tabIndex={0}
-        sx={{
-          flexGrow: "inherit",
-        }}
+        style={{ flexGrow: "inherit" }}
       />
-      <ActionButtons>
+      <JsonControlStyles.ActionButtons>
         <Tooltip title="Paste from clipboard" arrow>
-          <CustomIconButton
+          <JsonControlStyles.CustomIconButton
             size="small"
             onClick={() => onPaste(value)}
             aria-label="Paste JSON in control"
           >
             <ContentPaste fontSize="small" />
-          </CustomIconButton>
+          </JsonControlStyles.CustomIconButton>
         </Tooltip>
         <Tooltip title="Clear input" arrow>
-          <CustomIconButton
+          <JsonControlStyles.CustomIconButton
             size="small"
             onClick={onClear}
             aria-label="Clear JSON input"
           >
             <CloseIcon fontSize="small" />
-          </CustomIconButton>
+          </JsonControlStyles.CustomIconButton>
         </Tooltip>{" "}
-      </ActionButtons>
-      <ToolBar>
+      </JsonControlStyles.ActionButtons>
+      <JsonControlStyles.ToolBar>
         <Tooltip title="Copy input" arrow>
-          <CustomIconButton
+          <JsonControlStyles.CustomIconButton
             size="small"
             onClick={() => onCopy(value)}
             aria-label="Copy JSON input"
           >
             <ContentCopyIcon fontSize="small" />
-          </CustomIconButton>
+          </JsonControlStyles.CustomIconButton>
         </Tooltip>
-      </ToolBar>
+      </JsonControlStyles.ToolBar>
     </MotionJsonTextareaWrapper>
   );
 }

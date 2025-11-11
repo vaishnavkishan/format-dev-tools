@@ -4,7 +4,7 @@ import JsonInput from "./components/JsonInput";
 import Header from "./components/Header";
 import { useEffect, useRef, useState } from "react";
 import JsonOutput from "./components/JsonOutput";
-import { useToast } from "./components/ToastContext";
+import { useToast } from "./contexts/ToastContext";
 import Footer from "./components/Footer";
 import { Box } from "@mui/material";
 
@@ -13,7 +13,6 @@ type FocusTarget = "none" | "input" | "output";
 export default function App() {
   const [smallTitle, setSmallTitle] = useState(false);
   const [error, setError] = useState(false);
-  // const [inputHeight, setInputHeight] = useState(400);
   const [isFocused, setIsFocused] = useState<FocusTarget>("none");
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
   const { showToast } = useToast();
@@ -47,12 +46,7 @@ export default function App() {
 }
     `
   );
-  // useEffect(() => {
-  //   if (inputRef.current) {
-  //     console.log("Setting height:", inputRef.current.offsetHeight);
-  //     setInputHeight(inputRef.current.offsetHeight);
-  //   }
-  // }, [input]);
+
   return (
     <>
       <Header shrink={smallTitle} />

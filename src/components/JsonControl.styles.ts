@@ -1,52 +1,45 @@
 import { styled } from "@mui/material/styles";
-import { InputBase, Box, IconButton } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 
 // Wrapper around textarea
 export const JsonTextareaWrapper = styled(Box)(() => ({
   position: "relative",
   flex: 1,
   margin: 8,
-  //   height: 800,
-  //   minHeight: 200,
   overflow: "hidden", // clip inner scroll
   display: "flex",
   flexDirection: "column",
   borderRadius: 15,
 }));
 
-// The textarea itself
-export const JsonTextarea = styled(InputBase)(({ theme }) => ({
+export const JsonTextArea = styled("textarea")(({ theme }) => ({
+  minHeight: "400px",
+  maxHeight: "80vh",
   width: "100%",
+  resize: "vertical",
+  overflow: "auto",
   borderRadius: 15,
   borderBottomLeftRadius: 0,
   borderBottomRightRadius: 0,
-  border: `2px solid`,
-  borderColor: theme.palette.divider,
+  boxSizing: "border-box", // ✅ ensures border is counted in total width/height
+  appearance: "none", // ✅ removes default OS styles
+  outline: "none", // ✅ remove blue highlight
+  border: `2px solid ${theme.palette.divider}`, // ✅ normal border
+
   backgroundColor: theme.palette.mode === "dark" ? "#1E1E1E" : "#F3F6F9",
   color: theme.palette.text.primary,
   fontFamily: "'Fira Code', monospace",
   fontSize: 16,
   padding: "16px",
-  overflow: "auto",
-  lineHeight: "1.5",
-  flex: 1,
-  "& .MuiInputBase-input": {
-    padding: 0,
-    height: "100%", // fill wrapper
-    overflow: "auto", // enable scrolling
+  transition: "all 0.25s ease",
+
+  "&:focus": {
+    backgroundColor: theme.palette.mode === "dark" ? "#2B2B2B" : "#EAF4FF",
   },
+
   "&::placeholder": {
     color: theme.palette.text.secondary,
-  },
-  "&.Mui-error": {
-    borderColor: theme.palette.error.main,
-    "&:focus": {
-      boxShadow: `${theme.palette.error.main} 0 0 0 2px`,
-    },
-  },
-  "&:focus": {
-    outline: "none",
-    boxShadow: `${theme.palette.primary.main} 0 0 0 2px`,
+    opacity: 0.7,
   },
 }));
 

@@ -1,18 +1,15 @@
 import { Box, Typography, Grid } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
 import Logo from "../assets/logo.svg";
+import { useBreakpoint } from "../contexts/BreakpointContext";
 
 interface HeaderProps {
   shrink?: boolean;
 }
 
 export default function Header({ shrink = false }: HeaderProps) {
-  return (
-    <>
-      <BigScreenHeader shrink={shrink} />
-      <MobileHeader />
-    </>
-  );
+  const { isXs } = useBreakpoint();
+  return <>{isXs ? <MobileHeader /> : <BigScreenHeader shrink={shrink} />}</>;
 }
 
 // 🖥️ Big screen header with smooth subtitle animation
@@ -102,7 +99,7 @@ function MobileHeader() {
   return (
     <Grid
       container
-      display={{ xs: "flex", sm: "none" }}
+      display={{ xs: "flex" }}
       alignItems="center"
       spacing={2}
       sx={{ mb: 2, p: 2 }}
