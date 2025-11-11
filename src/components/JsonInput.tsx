@@ -2,10 +2,10 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import CloseIcon from "@mui/icons-material/Close";
 import { ContentPaste } from "@mui/icons-material";
 import * as JsonControlStyles from "./JsonControl.styles";
-import { type Ref } from "react";
+import { useEffect, type Ref } from "react";
 import { Tooltip, useTheme } from "@mui/material";
-import { motion } from "framer-motion";
-import { JsonTextArea } from "./JsonControl.styles";
+import { motion, useAnimationControls } from "framer-motion";
+import { JsonTextArea, JsonTextareaWrapper } from "./JsonControl.styles";
 
 interface JsonInputProps {
   value: string;
@@ -20,7 +20,7 @@ interface JsonInputProps {
   onClear: () => void;
   inputRef: Ref<HTMLTextAreaElement | null>;
 }
-const MotionJsonTextareaWrapper = motion(JsonControlStyles.JsonTextareaWrapper);
+const MotionJsonTextareaWrapper = motion.create(JsonTextareaWrapper);
 
 export default function JsonInput({
   value,
@@ -34,28 +34,42 @@ export default function JsonInput({
   onClear,
 }: JsonInputProps) {
   const theme = useTheme();
+  const controls = useAnimationControls();
 
   const boxColor = error
     ? theme.palette.error.main
     : theme.palette.primary.main;
+
+  // 🧠 React to focus + error changes
+  useEffect(() => {
+    if (isFocused) {
+      // Focused → start pulsing animation
+      controls.start({
+        boxShadow: [
+          `${boxColor} 0px 0px 3px 1px`,
+          `${boxColor} 0px 0px 7px 1px`,
+        ],
+        transition: {
+          duration: 0.7,
+          ease: "easeInOut",
+          repeat: Infinity,
+          repeatType: "mirror",
+        },
+      });
+    } else {
+      // Blur → reset to no shadow
+      controls.start({
+        boxShadow: "none",
+        transition: { duration: 0.3, ease: "easeOut" },
+      });
+    }
+  }, [isFocused, error, boxColor, controls]);
+
   return (
     <MotionJsonTextareaWrapper
-      initial={{
-        boxShadow: isFocused ? `${boxColor} 0px 0px 3px 1px` : "none",
-      }}
-      animate={{
-        boxShadow: isFocused ? `${boxColor} 0px 0px 10px 1px` : "none",
-      }}
-      transition={{
-        duration: 0.5,
-        ease: "easeInOut",
-        repeatType: "mirror",
-        repeat: Infinity,
-      }}
+      animate={controls} // 👈 use controlled animation
+      initial={false} // prevent initial flicker
       id="json-input-wrapper"
-      sx={{
-        boxShadow: isFocused ? `${boxColor} 0px 0px 5px 3px` : "none",
-      }}
       onClick={onFocus}
     >
       <JsonTextArea

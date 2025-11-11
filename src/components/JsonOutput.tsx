@@ -8,7 +8,8 @@ import {
   ToolBar,
 } from "./JsonControl.styles";
 import { Tooltip, useTheme } from "@mui/material";
-import { motion } from "framer-motion";
+import { motion, useAnimationControls } from "framer-motion";
+import { useEffect } from "react";
 
 interface JsonOutputProps {
   value: string;
@@ -18,6 +19,7 @@ interface JsonOutputProps {
   onError: () => void;
   isFocused?: boolean;
 }
+const MotionJsonTextareaWrapper = motion.create(JsonTextareaWrapper);
 
 export default function JsonOutput({
   value: input,
@@ -29,31 +31,36 @@ export default function JsonOutput({
 }: JsonOutputProps) {
   const formattedInput = formatJson(input);
   const theme = useTheme();
-  const MotionJsonTextareaWrapper = motion(JsonTextareaWrapper);
+  const controls = useAnimationControls();
+
+  useEffect(() => {
+    if (isFocused) {
+      controls.start({
+        boxShadow: [
+          `${theme.palette.warning.main} 0px 0px 3px 1px`,
+          `${theme.palette.warning.main} 0px 0px 7px 1px`,
+        ],
+        transition: {
+          duration: 0.7,
+          ease: "easeInOut",
+          repeat: Infinity,
+          repeatType: "mirror",
+        },
+      });
+    } else {
+      controls.start({
+        boxShadow: "none",
+        transition: { duration: 0.3, ease: "easeOut" },
+      });
+    }
+  }, [controls, isFocused, theme]);
 
   return (
     <MotionJsonTextareaWrapper
-      initial={{
-        boxShadow: isFocused
-          ? `${theme.palette.warning.light} 0px 0px 3px 1px`
-          : "none",
-      }}
-      animate={{
-        boxShadow: isFocused
-          ? `${theme.palette.warning.main} 0px 0px 10px 1px`
-          : "none",
-      }}
-      transition={{
-        duration: 0.5,
-        ease: "easeInOut",
-        repeatType: "mirror",
-        repeat: Infinity,
-      }}
+      animate={controls}
+      initial={false}
       sx={{
         maxHeight: "80vh",
-        boxShadow: isFocused
-          ? `${theme.palette.warning.main} 0px 0px 5px 3px`
-          : "none",
       }}
       onClick={onFocus}
       onBlur={onBlur}

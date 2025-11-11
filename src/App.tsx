@@ -37,7 +37,7 @@ export default function App() {
   );
   function main() {
     return (
-      <Grid container justifyContent="center" spacing={2} alignItems="stretch">
+      <Grid container justifyContent="center" spacing={1} alignItems="stretch">
         <Grid size={{ xs: 12, sm: 6 }} display="flex" flexDirection="column">
           <JsonInput
             inputRef={inputRef}
@@ -100,6 +100,7 @@ export default function App() {
     setSmallTitle(true);
   }
   function handleBlur() {
+    console.log("blurred!");
     setIsFocused("none");
   }
   function handleError() {

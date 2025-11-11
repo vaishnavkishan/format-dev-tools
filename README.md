@@ -4,7 +4,7 @@ A json formatter/validator that does it locally without sending data anywhere.
 
 # Features
 
-## MV
+## MVP
 
 - Format json string
 - Allow pasting in input
