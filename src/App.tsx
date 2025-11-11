@@ -7,6 +7,7 @@ import JsonOutput from "./components/JsonOutput";
 import { useToast } from "./contexts/ToastContext";
 import Footer from "./components/Footer";
 import { Box } from "@mui/material";
+import { DefaultJson } from "./constants";
 
 type FocusTarget = "none" | "input" | "output";
 
@@ -25,27 +26,7 @@ export default function App() {
     return () => clearTimeout(timeout);
   }, []);
 
-  const [input, setInput] = useState(
-    `
-    {
-  "array": [
-    1,
-    2,
-    3
-  ],
-  "boolean": true,
-  "color": "gold",
-  "font-color": "red",
-  "null": null,
-  "number": 123,
-  "object": {
-    "a": "b",
-    "c": "d"
-  },
-  "string": "Hello World"
-}
-    `
-  );
+  const [input, setInput] = useState(DefaultJson);
 
   return (
     <>
