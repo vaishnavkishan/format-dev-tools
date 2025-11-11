@@ -1,7 +1,8 @@
 import { Box, Typography, Grid } from "@mui/material";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, useAnimationControls } from "framer-motion";
 import Logo from "../assets/logo.svg";
 import { useBreakpoint } from "../contexts/BreakpointContext";
+import { useEffect } from "react";
 
 interface HeaderProps {
   shrink?: boolean;
@@ -19,17 +20,50 @@ function BigScreenHeader({ shrink }: { shrink: boolean }) {
   const initialMarginTop = 48;
   const initialMarginBottom = 60;
 
+  const wrapperControls = useAnimationControls();
+  const logoControls = useAnimationControls();
+  const titleControls = useAnimationControls();
+  const subTitleControls = useAnimationControls();
+
+  useEffect(() => {
+    async function runAnimations() {
+      await subTitleControls.start(
+        {
+          display: shrink ? "none" : "block",
+          y: shrink ? -10 : 0,
+        },
+        { duration: 0.4, ease: "easeInOut" }
+      );
+      await wrapperControls.start(
+        {
+          marginTop: shrink ? 10 : initialMarginTop,
+          marginBottom: shrink ? 10 : initialMarginBottom,
+        },
+        { duration: 0.5, ease: "easeInOut" }
+      );
+      logoControls.start(
+        {
+          height: shrink ? 48 : initialLogoHeight,
+        },
+        { duration: 0.5, ease: "easeInOut" }
+      );
+      titleControls.start(
+        {
+          fontSize: shrink ? 18 : initialTitleSize,
+        },
+        { duration: 0.5, ease: "easeInOut" }
+      );
+    }
+    runAnimations();
+  }, [shrink, wrapperControls, logoControls, titleControls, subTitleControls]);
+
   return (
     <motion.div
+      animate={wrapperControls}
       initial={{
-        marginTop: initialMarginTop,
-        marginBottom: initialMarginBottom,
-      }}
-      animate={{
         marginTop: shrink ? 10 : initialMarginTop,
         marginBottom: shrink ? 10 : initialMarginBottom,
       }}
-      transition={{ duration: 0.5, ease: "easeInOut" }}
       style={{
         display: "flex",
         justifyContent: "center",
@@ -41,9 +75,8 @@ function BigScreenHeader({ shrink }: { shrink: boolean }) {
       <motion.img
         src={Logo}
         alt="Logo"
-        initial={{ height: initialLogoHeight }}
-        animate={{ height: shrink ? 48 : initialLogoHeight }}
-        transition={{ duration: 0.5, ease: "easeInOut" }}
+        animate={logoControls}
+        initial={false}
         style={{ width: "auto", objectFit: "contain" }}
       />
 
@@ -58,9 +91,8 @@ function BigScreenHeader({ shrink }: { shrink: boolean }) {
         <Box>
           <Typography
             component={motion.h3}
-            initial={{ fontSize: initialTitleSize }}
-            animate={{ fontSize: shrink ? 18 : initialTitleSize }}
-            transition={{ duration: 0.5, ease: "easeInOut" }}
+            animate={titleControls}
+            initial={false}
             variant="h3"
             color="text.primary"
             fontWeight="bold"
@@ -70,25 +102,22 @@ function BigScreenHeader({ shrink }: { shrink: boolean }) {
         </Box>
 
         {/* Animate subtitle with fade + slide */}
-        <AnimatePresence>
-          {!shrink && (
-            <motion.div
-              key="subtitle"
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.4, ease: "easeInOut" }}
-            >
-              <Typography
-                variant="body1"
-                color="text.secondary"
-                sx={{ fontSize: "1.1rem" }}
-              >
-                Format, view, and explore your JSON locally.
-              </Typography>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        <motion.div
+          key="subtitle"
+          animate={subTitleControls}
+          initial={{
+            display: "none",
+            y: -10,
+          }}
+        >
+          <Typography
+            variant="body1"
+            color="text.secondary"
+            sx={{ fontSize: "1.1rem" }}
+          >
+            Format, view, and explore your JSON locally.
+          </Typography>
+        </motion.div>
       </Box>
     </motion.div>
   );
