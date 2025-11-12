@@ -30,3 +30,19 @@ A json formatter/validator that does it locally without sending data anywhere.
 - Material UI
   - Branding customizations like colors and fonts
   - Control customizations
+- Animation using [Framer Motion](https://motion.dev/)
+
+## Deployment
+
+[Vaiki product builder](https://stproductbuilderreact.z13.web.core.windows.net/)
+
+1. `az login --tenant 348db05a-6454-401f-a262-88a9c511d485`
+1. `yarn build`
+1. `cd dist`
+1. ```
+   az storage blob upload-batch \
+       --account-name stformatdevtools \
+       --destination '$web' \
+       --source . \
+       --overwrite
+   ```

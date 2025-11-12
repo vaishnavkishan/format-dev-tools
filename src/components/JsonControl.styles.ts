@@ -86,6 +86,7 @@ export const ToolBar = styled(Box)(({ theme }) => ({
   display: "flex",
   justifyContent: "flex-start",
   padding: theme.spacing(1),
+  gap: 8,
 }));
 
 export const CustomIconButton = styled(IconButton)(({ theme }) => ({
