@@ -37,39 +37,59 @@ export default function App() {
   );
   function main() {
     return (
-      <Grid container justifyContent="center" spacing={1} alignItems="stretch">
-        <Grid size={{ xs: 12, sm: 6 }} display="flex" flexDirection="column">
-          <JsonInput
-            inputRef={inputRef}
-            value={input}
-            error={error}
-            isFocused={isFocused == "input"}
-            onPaste={handlePaste}
-            onChange={(newValue: string) => {
-              setError(false);
-              setInput(newValue);
-            }}
-            onFocus={() => handleFocus("input")}
-            onBlur={handleBlur}
-            onCopy={handleCopy}
-            onClear={() => {
-              setSmallTitle(false);
-              setInput("");
-            }}
-          />
+      <main>
+        <Grid
+          container
+          justifyContent="center"
+          spacing={1}
+          alignItems="stretch"
+          component="section"
+        >
+          <Grid
+            size={{ xs: 12, sm: 6 }}
+            display="flex"
+            flexDirection="column"
+            component="section"
+          >
+            <JsonInput
+              aria-label="JSON input area"
+              inputRef={inputRef}
+              value={input}
+              error={error}
+              isFocused={isFocused == "input"}
+              onPaste={handlePaste}
+              onChange={(newValue: string) => {
+                setError(false);
+                setInput(newValue);
+              }}
+              onFocus={() => handleFocus("input")}
+              onBlur={handleBlur}
+              onCopy={handleCopy}
+              onClear={() => {
+                setSmallTitle(false);
+                setInput("");
+              }}
+            />
+          </Grid>
+          <Grid
+            size={{ xs: 12, sm: 6 }}
+            display="flex"
+            flexDirection="column"
+            component="section"
+          >
+            <JsonOutput
+              aria-label="Formatted JSON output area"
+              // height={inputHeight}
+              value={input}
+              isFocused={isFocused == "output"}
+              onBlur={handleBlur}
+              onCopy={handleCopy}
+              onFocus={() => handleFocus("output")}
+              onError={handleError}
+            />
+          </Grid>
         </Grid>
-        <Grid size={{ xs: 12, sm: 6 }} display="flex" flexDirection="column">
-          <JsonOutput
-            // height={inputHeight}
-            value={input}
-            isFocused={isFocused == "output"}
-            onBlur={handleBlur}
-            onCopy={handleCopy}
-            onFocus={() => handleFocus("output")}
-            onError={handleError}
-          />
-        </Grid>
-      </Grid>
+      </main>
     );
   }
   async function handlePaste() {

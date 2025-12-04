@@ -81,7 +81,7 @@ export default function JsonOutput({
           __html: input
             ? formattedInput
               ? highlightJson(formattedInput)
-              : `<span style="color:${theme.palette.error.main.toString()}">Invalid JSON</span>`
+              : `<span role="alert" aria-live="assertive" style="color:${theme.palette.error.main.toString()}">Invalid JSON</span>`
             : `<span style="color:${theme.palette.warning.main.toString()}">Please enter some JSON</span>`,
         }}
       />

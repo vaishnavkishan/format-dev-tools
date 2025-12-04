@@ -26,15 +26,13 @@ A json formatter/validator that does it locally without sending data anywhere.
 
 # Learnings
 
-- UX designs using [Google Stich AI](https://stitch.withgoogle.com)
+- UX designs using [Google Stitch AI](https://stitch.withgoogle.com)
 - Material UI
-  - Branding customizations like colors and fonts
+  - Branding customizations like colors and fonts using [Material-UI Theme Creator](https://bareynol.github.io/mui-theme-creator/).
   - Control customizations
 - Animation using [Framer Motion](https://motion.dev/)
 
 ## Deployment
-
-[Vaiki product builder](https://stproductbuilderreact.z13.web.core.windows.net/)
 
 1. `az login --tenant 348db05a-6454-401f-a262-88a9c511d485`
 1. `yarn build`

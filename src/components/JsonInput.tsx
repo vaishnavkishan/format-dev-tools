@@ -72,6 +72,20 @@ export default function JsonInput({
       id="json-input-wrapper"
       onClick={onFocus}
     >
+      {/* Visible or screen-reader-only label */}
+      <label
+        id="json-input-label"
+        htmlFor="json-input-textarea"
+        className="sr-only"
+      >
+        JSON input
+      </label>
+
+      {/* Instructions for screen reader users */}
+      <p id="json-input-instructions" className="sr-only">
+        Paste or type JSON here. Screen reader users: errors will be announced
+        if JSON format is invalid. Press Control plus A to select all text.
+      </p>
       <JsonTextArea
         id="json-input-textarea"
         value={value}
@@ -81,6 +95,9 @@ export default function JsonInput({
         placeholder="Paste your raw JSON here..."
         tabIndex={0}
         style={{ flexGrow: "inherit" }}
+        aria-labelledby="json-input-label"
+        aria-describedby="json-input-instructions"
+        aria-invalid={!!error} // if you're tracking JSON parse errors
       />
       <JsonControlStyles.ActionButtons>
         <Tooltip title="Paste from clipboard" arrow>

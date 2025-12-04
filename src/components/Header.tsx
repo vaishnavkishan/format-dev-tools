@@ -60,66 +60,68 @@ function BigScreenHeader({ shrink }: { shrink: boolean }) {
   }, [shrink, wrapperControls, logoControls, titleControls, subTitleControls]);
 
   return (
-    <motion.div
-      animate={wrapperControls}
-      initial={{
-        marginTop: shrink ? 10 : initialMarginTop,
-        marginBottom: shrink ? 10 : initialMarginBottom,
-      }}
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Box display="flex" flexDirection="row" alignItems="center" gap={0.5}>
-        {/* Logo */}
-        <motion.img
-          src={Logo}
-          alt="Logo"
-          animate={logoControls}
-          initial={{
-            height: initialLogoHeight,
-          }}
-          style={{ width: "auto", objectFit: "contain" }}
-        />
-        {/* Animate font size of title */}
-        <Box>
-          <Typography
-            component={motion.h3}
-            animate={titleControls}
-            initial={false}
-            variant="h3"
-            color="text.primary"
-            fontWeight="bold"
-          >
-            Format Dev-Tools
-          </Typography>
+    <header>
+      <motion.div
+        animate={wrapperControls}
+        initial={{
+          marginTop: shrink ? 10 : initialMarginTop,
+          marginBottom: shrink ? 10 : initialMarginBottom,
+        }}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Box display="flex" flexDirection="row" alignItems="center" gap={0.5}>
+          {/* Logo */}
+          <motion.img
+            src={Logo}
+            alt="Logo"
+            animate={logoControls}
+            initial={{
+              height: initialLogoHeight,
+            }}
+            style={{ width: "auto", objectFit: "contain" }}
+          />
+          {/* Animate font size of title */}
+          <Box>
+            <Typography
+              component={motion.h3}
+              animate={titleControls}
+              initial={false}
+              variant="h3"
+              color="text.primary"
+              fontWeight="bold"
+            >
+              Format Dev-Tools
+            </Typography>
+          </Box>
         </Box>
-      </Box>
 
-      {/* Title + Subtitle */}
-      <Box>
-        {/* Animate subtitle with fade + slide */}
-        <motion.div
-          key="subtitle"
-          animate={subTitleControls}
-          initial={{
-            display: "none",
-            y: -10,
-          }}
-        >
-          <Typography
-            variant="body1"
-            color="text.secondary"
-            sx={{ fontSize: "1.1rem" }}
+        {/* Title + Subtitle */}
+        <Box>
+          {/* Animate subtitle with fade + slide */}
+          <motion.div
+            key="subtitle"
+            animate={subTitleControls}
+            initial={{
+              display: "none",
+              y: -10,
+            }}
           >
-            Format, view, and explore your JSON locally.
-          </Typography>
-        </motion.div>
-      </Box>
-    </motion.div>
+            <Typography
+              variant="body1"
+              color="text.secondary"
+              sx={{ fontSize: "1.1rem" }}
+            >
+              Format, view, and explore your JSON locally.
+            </Typography>
+          </motion.div>
+        </Box>
+      </motion.div>
+    </header>
   );
 }
 
@@ -132,8 +134,9 @@ function MobileHeader() {
       alignItems="center"
       spacing={2}
       sx={{ mb: 2, p: 2 }}
+      component="section"
     >
-      <Grid size="auto">
+      <Grid size="auto" component="section">
         <Box
           component="img"
           src={Logo}
@@ -142,7 +145,7 @@ function MobileHeader() {
         />
       </Grid>
 
-      <Grid size="grow">
+      <Grid size="grow" component="section">
         <Typography
           variant="h5"
           color="text.primary"
