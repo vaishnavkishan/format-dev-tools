@@ -36,6 +36,8 @@ A json formatter/validator that does it locally without sending data anywhere.
   - Branding customizations like colors and fonts using [Material-UI Theme Creator](https://bareynol.github.io/mui-theme-creator/).
   - Control customizations
 - Animation using [Framer Motion](https://motion.dev/)
+- Accessibility using ARIA tags
+- Support for multiple languages using i18n library
 
 ## Deployment
 
