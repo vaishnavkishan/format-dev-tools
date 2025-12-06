@@ -14,9 +14,14 @@ A json formatter/validator that does it locally without sending data anywhere.
 ## Extra features
 
 - Dark theme
-- Different views in output like Text, Tree, Form, etc.
-- Layout options like Comfortable and Compact
 - Font size option
+- Extra instructions for screen readers for Visually Impaired persons
+- Multi-language support
+
+## To be implemented
+
+- Layout options like Comfortable and Compact
+- Different views in output like Text, Tree, Form, etc.
 - Full screen mode
   - Input full screen
   - Output full screen

@@ -6,6 +6,7 @@ import { useEffect, type Ref } from "react";
 import { Tooltip, useTheme } from "@mui/material";
 import { motion, useAnimationControls } from "framer-motion";
 import { JsonTextArea, JsonTextareaWrapper } from "./JsonControl.styles";
+import { useTranslation } from "react-i18next";
 
 interface JsonInputProps {
   value: string;
@@ -35,6 +36,7 @@ export default function JsonInput({
 }: JsonInputProps) {
   const theme = useTheme();
   const controls = useAnimationControls();
+  const { t } = useTranslation();
 
   const boxColor = error
     ? theme.palette.error.main
@@ -78,13 +80,12 @@ export default function JsonInput({
         htmlFor="json-input-textarea"
         className="sr-only"
       >
-        JSON input
+        {t("json_input_label")}
       </label>
 
       {/* Instructions for screen reader users */}
       <p id="json-input-instructions" className="sr-only">
-        Paste or type JSON here. Screen reader users: errors will be announced
-        if JSON format is invalid. Press Control plus A to select all text.
+        {t("json_input_instructions")}
       </p>
       <JsonTextArea
         id="json-input-textarea"
@@ -92,7 +93,7 @@ export default function JsonInput({
         onChange={(e) => onChange(e.target.value)}
         onFocus={onFocus}
         onBlur={onBlur}
-        placeholder="Paste your raw JSON here..."
+        placeholder={t("json_input_placeholder")}
         tabIndex={0}
         style={{ flexGrow: "inherit" }}
         aria-labelledby="json-input-label"
@@ -100,31 +101,31 @@ export default function JsonInput({
         aria-invalid={!!error} // if you're tracking JSON parse errors
       />
       <JsonControlStyles.ActionButtons>
-        <Tooltip title="Paste from clipboard" arrow>
+        <Tooltip title={t("paste_input_json")} arrow>
           <JsonControlStyles.CustomIconButton
             size="small"
             onClick={() => onPaste(value)}
-            aria-label="Paste JSON in control"
+            aria-label={t("paste_input_json")}
           >
             <ContentPaste fontSize="small" />
           </JsonControlStyles.CustomIconButton>
         </Tooltip>
-        <Tooltip title="Clear input" arrow>
+        <Tooltip title={t("clear_json")} arrow>
           <JsonControlStyles.CustomIconButton
             size="small"
             onClick={onClear}
-            aria-label="Clear JSON input"
+            aria-label={t("clear_json")}
           >
             <CloseIcon fontSize="small" />
           </JsonControlStyles.CustomIconButton>
         </Tooltip>{" "}
       </JsonControlStyles.ActionButtons>
       <JsonControlStyles.ToolBar>
-        <Tooltip title="Copy input" arrow>
+        <Tooltip title={t("copy_input_json")} arrow>
           <JsonControlStyles.CustomIconButton
             size="small"
             onClick={() => onCopy(value)}
-            aria-label="Copy JSON input"
+            aria-label={t("copy_input_json")}
           >
             <ContentCopyIcon fontSize="small" />
           </JsonControlStyles.CustomIconButton>

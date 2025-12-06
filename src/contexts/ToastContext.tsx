@@ -50,6 +50,8 @@ export const ToastProvider = ({ children }: { children: ReactNode }) => {
           onClose={hideToast}
           sx={{ width: "100%" }}
           variant="filled"
+          role="alert" // tells screen readers this is important
+          aria-live="assertive" // immediately announces the content
         >
           {toast.message}
         </Alert>

@@ -8,6 +8,7 @@ import { useToast } from "./contexts/ToastContext";
 import Footer from "./components/Footer";
 import { Box } from "@mui/material";
 import { DefaultJson } from "./constants";
+import { t } from "i18next";
 
 type FocusTarget = "none" | "input" | "output";
 
@@ -52,7 +53,7 @@ export default function App() {
             component="section"
           >
             <JsonInput
-              aria-label="JSON input area"
+              aria-label={t("json_input_area")}
               inputRef={inputRef}
               value={input}
               error={error}
@@ -78,8 +79,7 @@ export default function App() {
             component="section"
           >
             <JsonOutput
-              aria-label="Formatted JSON output area"
-              // height={inputHeight}
+              aria-label={t("json_output_area")}
               value={input}
               isFocused={isFocused == "output"}
               onBlur={handleBlur}
@@ -106,12 +106,17 @@ export default function App() {
       .writeText(text)
       .then(() => {
         showToast({
-          message: "Copied to clipboard!",
+          message: t("copy_success"),
           type: "success",
           duration: 1000,
         });
       })
       .catch((err) => {
+        showToast({
+          message: t("copy_failure"),
+          type: "error",
+          duration: 1000,
+        });
         console.error("Failed to copy: ", err);
       });
   }

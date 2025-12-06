@@ -3,6 +3,7 @@ import { motion, useAnimationControls } from "framer-motion";
 import Logo from "../assets/logo.svg";
 import { useBreakpoint } from "../contexts/BreakpointContext";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 interface HeaderProps {
   shrink?: boolean;
@@ -15,6 +16,7 @@ export default function Header({ shrink = false }: HeaderProps) {
 
 // 🖥️ Big screen header with smooth subtitle animation
 function BigScreenHeader({ shrink }: { shrink: boolean }) {
+  const { t } = useTranslation();
   const initialLogoHeight = 80;
   const initialTitleSize = 32;
   const initialMarginTop = 48;
@@ -95,7 +97,7 @@ function BigScreenHeader({ shrink }: { shrink: boolean }) {
               color="text.primary"
               fontWeight="bold"
             >
-              Format Dev-Tools
+              {t("title")}
             </Typography>
           </Box>
         </Box>
@@ -116,7 +118,7 @@ function BigScreenHeader({ shrink }: { shrink: boolean }) {
               color="text.secondary"
               sx={{ fontSize: "1.1rem" }}
             >
-              Format, view, and explore your JSON locally.
+              {t("subtitle")}
             </Typography>
           </motion.div>
         </Box>
@@ -127,6 +129,7 @@ function BigScreenHeader({ shrink }: { shrink: boolean }) {
 
 // 📱 Mobile header remains static
 function MobileHeader() {
+  const { t } = useTranslation();
   return (
     <Grid
       container
@@ -153,7 +156,7 @@ function MobileHeader() {
           lineHeight={1.2}
           sx={{ fontSize: "1.5rem" }}
         >
-          Format Dev-Tools
+          {t("title")}
         </Typography>
 
         <Typography
@@ -161,7 +164,7 @@ function MobileHeader() {
           color="text.secondary"
           sx={{ mt: 0.5, fontSize: "0.9rem", lineHeight: 1.3 }}
         >
-          Format and explore your JSON locally.
+          {t("subtitle")}
         </Typography>
       </Grid>
     </Grid>

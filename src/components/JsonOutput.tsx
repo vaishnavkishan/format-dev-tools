@@ -10,6 +10,7 @@ import {
 import { Tooltip, useTheme } from "@mui/material";
 import { motion, useAnimationControls } from "framer-motion";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface JsonOutputProps {
   value: string;
@@ -33,6 +34,7 @@ export default function JsonOutput({
   const formattedInput = formatJson(input);
   const theme = useTheme();
   const controls = useAnimationControls();
+  const { t } = useTranslation();
 
   // 🧩 Font size state (default 16px)
   const [fontSize, setFontSize] = useState(16);
@@ -81,20 +83,24 @@ export default function JsonOutput({
           __html: input
             ? formattedInput
               ? highlightJson(formattedInput)
-              : `<span role="alert" aria-live="assertive" style="color:${theme.palette.error.main.toString()}">Invalid JSON</span>`
-            : `<span style="color:${theme.palette.warning.main.toString()}">Please enter some JSON</span>`,
+              : `<span role="alert" aria-live="assertive" style="color:${theme.palette.error.main.toString()}">${t(
+                  "error_invalid_json"
+                )}</span>`
+            : `<span style="color:${theme.palette.warning.main.toString()}">${t(
+                "no_json_provided"
+              )}</span>`,
         }}
       />
 
       {/* Copy Button */}
       <ActionButtons>
-        <Tooltip title="Copy formatted JSON" arrow>
+        <Tooltip title={t("copy_output_json")} arrow>
           <CustomIconButton
             size="small"
             onClick={() => {
               onCopy(formattedInput);
             }}
-            aria-label="Copy formatted JSON"
+            aria-label={t("copy_output_json")}
           >
             <ContentCopyIcon fontSize="small" />
           </CustomIconButton>
@@ -103,21 +109,21 @@ export default function JsonOutput({
 
       {/* Toolbar Section */}
       <ToolBar>
-        <Tooltip title="Decrease font size" arrow>
+        <Tooltip title={t("decrease_font_size")} arrow>
           <CustomIconButton
             size="small"
             onClick={decreaseFont}
-            aria-label="Decrease font size"
+            aria-label={t("decrease_font_size")}
           >
             <TextDecrease />
           </CustomIconButton>
         </Tooltip>
 
-        <Tooltip title="Increase font size" arrow>
+        <Tooltip title={t("increase_font_size")} arrow>
           <CustomIconButton
             size="small"
             onClick={increaseFont}
-            aria-label="Increase font size"
+            aria-label={t("increase_font_size")}
           >
             <TextIncrease />
           </CustomIconButton>
