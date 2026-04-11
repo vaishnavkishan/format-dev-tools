@@ -11,11 +11,12 @@ export default function App() {
   const [smallTitle, setSmallTitle] = useState(false);
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      setSmallTitle(true);
-    }, 5000);
-
-    return () => clearTimeout(timeout);
+    // Animation timer disabled for now
+    // const timeout = setTimeout(() => {
+    //   setSmallTitle(true);
+    // }, 5000);
+    //
+    // return () => clearTimeout(timeout);
   }, []);
 
   return (

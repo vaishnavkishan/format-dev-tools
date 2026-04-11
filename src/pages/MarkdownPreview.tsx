@@ -9,6 +9,9 @@ import {
   Button,
   Stack,
   Link,
+  Tabs,
+  Tab,
+  Tooltip,
 } from "@mui/material";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -17,6 +20,8 @@ import "highlight.js/styles/github-dark.css";
 import ContentPasteIcon from "@mui/icons-material/ContentPaste";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import ClearAllIcon from "@mui/icons-material/ClearAll";
+import ViewQuiltIcon from "@mui/icons-material/ViewQuilt";
+import ViewStreamIcon from "@mui/icons-material/ViewStream";
 import { DefaultMarkdown } from "../constants";
 import { useToast } from "../contexts/ToastContext";
 
@@ -30,6 +35,8 @@ export default function MarkdownPreview({
   const { t } = useTranslation();
   const [input, setInput] = useState(DefaultMarkdown);
   const [isFocused, setIsFocused] = useState(false);
+  const [previewTab, setPreviewTab] = useState(0);
+  const [viewMode, setViewMode] = useState<"split" | "tabbed">("split");
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
   const { showToast } = useToast();
 
@@ -63,11 +70,41 @@ export default function MarkdownPreview({
       });
   }
 
+  function handleCopyPreview() {
+    const previewElement = document.getElementById("markdown-preview-content");
+    if (previewElement) {
+      const html = previewElement.innerHTML;
+      navigator.clipboard
+        .writeText(html)
+        .then(() => {
+          showToast({
+            message: t("copy_success"),
+            type: "success",
+            duration: 1000,
+          });
+        })
+        .catch((err) => {
+          showToast({
+            message: t("copy_failure"),
+            type: "error",
+            duration: 1000,
+          });
+          console.error("Failed to copy: ", err);
+        });
+    }
+  }
+
   return (
     <main>
-      <Grid container justifyContent="center" spacing={2} sx={{ p: 2 }}>
+      <Grid
+        container
+        justifyContent="center"
+        spacing={2}
+        sx={{ p: 2 }}
+        alignItems="stretch"
+      >
         {/* Input Section */}
-        <Grid size={{ xs: 12, sm: 6 }}>
+        <Grid size={viewMode === "split" ? { xs: 12, sm: 6 } : 12}>
           <Paper
             elevation={3}
             sx={{
@@ -87,20 +124,55 @@ export default function MarkdownPreview({
                 {t("markdown_input_label", "Markdown Input")}
               </Typography>
               <Stack direction="row" spacing={1}>
-                <Button
-                  size="small"
-                  startIcon={<ContentPasteIcon />}
-                  onClick={handlePaste}
+                <Tooltip
+                  title={t("paste_tooltip", "Paste from clipboard")}
+                  arrow
                 >
-                  {t("paste", "Paste")}
-                </Button>
-                <Button
-                  size="small"
-                  startIcon={<ContentCopyIcon />}
-                  onClick={handleCopy}
+                  <Button
+                    size="small"
+                    startIcon={<ContentPasteIcon />}
+                    onClick={handlePaste}
+                  >
+                    {t("paste", "Paste")}
+                  </Button>
+                </Tooltip>
+                <Tooltip
+                  title={t("copy_markdown_tooltip", "Copy raw Markdown source")}
+                  arrow
                 >
-                  {t("copy", "Copy")}
-                </Button>
+                  <Button
+                    size="small"
+                    startIcon={<ContentCopyIcon />}
+                    onClick={handleCopy}
+                  >
+                    {t("copy", "Copy")}
+                  </Button>
+                </Tooltip>
+                <Tooltip
+                  title={t(
+                    "toggle_view_tooltip",
+                    "Toggle between Split and Tabbed view",
+                  )}
+                  arrow
+                >
+                  <Button
+                    size="small"
+                    startIcon={
+                      viewMode === "split" ? (
+                        <ViewStreamIcon />
+                      ) : (
+                        <ViewQuiltIcon />
+                      )
+                    }
+                    onClick={() =>
+                      setViewMode((v) => (v === "split" ? "tabbed" : "split"))
+                    }
+                  >
+                    {viewMode === "split"
+                      ? t("tabbed", "Tabbed")
+                      : t("split", "Split")}
+                  </Button>
+                </Tooltip>
                 <Button
                   size="small"
                   color="error"
@@ -129,10 +201,15 @@ export default function MarkdownPreview({
               placeholder={t("markdown_placeholder", "Enter markdown here...")}
               sx={{
                 flexGrow: 1,
+                minHeight: 0,
                 "& .MuiInputBase-root": {
                   height: "100%",
                   alignItems: "flex-start",
                   fontFamily: "monospace",
+                },
+                "& .MuiInputBase-input": {
+                  height: "100% !important",
+                  overflow: "auto !important",
                 },
                 "& .MuiOutlinedInput-notchedOutline": {
                   borderColor: isFocused ? "primary.main" : "divider",
@@ -143,122 +220,219 @@ export default function MarkdownPreview({
         </Grid>
 
         {/* Preview Section */}
-        <Grid size={{ xs: 12, sm: 6 }}>
+        <Grid size={viewMode === "split" ? { xs: 12, sm: 6 } : 12}>
           <Paper
             elevation={3}
             sx={{
               p: 3,
               height: "70vh",
-              overflowY: "auto",
+              display: "flex",
+              flexDirection: "column",
               backgroundColor: "background.paper",
               border: "1px solid",
               borderColor: "divider",
             }}
           >
-            <Typography variant="overline" display="block" mb={2}>
-              {t("markdown_preview_label", "Live Preview")}
-            </Typography>
-            <Box sx={{ color: "text.primary" }}>
-              <ReactMarkdown
-                remarkPlugins={[remarkGfm]}
-                rehypePlugins={[rehypeHighlight]}
-                components={{
-                  h1: ({ ...props }) => (
-                    <Typography variant="h3" gutterBottom {...props} />
-                  ),
-                  h2: ({ ...props }) => (
-                    <Typography variant="h4" gutterBottom {...props} />
-                  ),
-                  h3: ({ ...props }) => (
-                    <Typography variant="h5" gutterBottom {...props} />
-                  ),
-                  p: ({ ...props }) => (
-                    <Typography variant="body1" paragraph {...props} />
-                  ),
-                  ul: ({ ...props }) => (
-                    <Box
-                      component="ul"
-                      sx={{ pl: 4, mb: 2, listStyleType: "disc" }}
-                      {...props}
-                    />
-                  ),
-                  ol: ({ ...props }) => (
-                    <Box
-                      component="ol"
-                      sx={{ pl: 4, mb: 2, listStyleType: "decimal" }}
-                      {...props}
-                    />
-                  ),
-                  li: ({ ...props }) => (
-                    <Typography component="li" variant="body1" {...props} />
-                  ),
-                  a: ({ ...props }) => (
-                    <Link
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      {...props}
-                    />
-                  ),
-                  img: ({ ...props }) => (
-                    <Box
-                      component="img"
-                      sx={{
-                        maxWidth: "100%",
-                        height: "auto",
-                        borderRadius: 1,
-                        my: 1,
-                      }}
-                      {...props}
-                    />
-                  ),
-                  code: ({ ...props }) => (
-                    <code
-                      style={{
-                        backgroundColor: "rgba(255,255,255,0.1)",
-                        padding: "2px 4px",
-                        borderRadius: "4px",
-                      }}
-                      {...props}
-                    />
-                  ),
-                  table: ({ ...props }) => (
-                    <Box
-                      component="table"
-                      sx={{
-                        borderCollapse: "collapse",
-                        width: "100%",
-                        mb: 2,
-                        border: "1px solid",
-                        borderColor: "divider",
-                      }}
-                      {...props}
-                    />
-                  ),
-                  th: ({ ...props }) => (
-                    <Box
-                      component="th"
-                      sx={{
-                        border: "1px solid",
-                        borderColor: "divider",
-                        p: 1,
-                        backgroundColor: "action.hover",
-                        fontWeight: "bold",
-                        textAlign: "left",
-                      }}
-                      {...props}
-                    />
-                  ),
-                  td: ({ ...props }) => (
-                    <Box
-                      component="td"
-                      sx={{ border: "1px solid", borderColor: "divider", p: 1 }}
-                      {...props}
-                    />
-                  ),
-                }}
-              >
-                {input}
-              </ReactMarkdown>
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
+              mb={1}
+            >
+              <Typography variant="overline">
+                {t("markdown_preview_label", "Live Preview")}
+              </Typography>
+              <Stack direction="row" spacing={1}>
+                <Tooltip
+                  title={t("copy_markdown_tooltip", "Copy raw Markdown source")}
+                  arrow
+                >
+                  <Button
+                    size="small"
+                    startIcon={<ContentCopyIcon />}
+                    onClick={handleCopy}
+                  >
+                    {t("copy_markdown", "Copy Markdown")}
+                  </Button>
+                </Tooltip>
+                <Tooltip
+                  title={t("copy_preview_tooltip", "Copy rendered HTML output")}
+                  arrow
+                >
+                  <Button
+                    size="small"
+                    startIcon={<ContentCopyIcon />}
+                    onClick={handleCopyPreview}
+                  >
+                    {t("copy_preview", "Copy Preview")}
+                  </Button>
+                </Tooltip>
+                <Tooltip
+                  title={t(
+                    "toggle_view_tooltip",
+                    "Toggle between Split and Tabbed view",
+                  )}
+                  arrow
+                >
+                  <Button
+                    size="small"
+                    startIcon={
+                      viewMode === "split" ? (
+                        <ViewStreamIcon />
+                      ) : (
+                        <ViewQuiltIcon />
+                      )
+                    }
+                    onClick={() =>
+                      setViewMode((v) => (v === "split" ? "tabbed" : "split"))
+                    }
+                  >
+                    {viewMode === "split"
+                      ? t("tabbed", "Tabbed")
+                      : t("split", "Split")}
+                  </Button>
+                </Tooltip>
+              </Stack>
+            </Stack>
+
+            <Tabs
+              value={previewTab}
+              onChange={(_, v) => setPreviewTab(v)}
+              sx={{ mb: 2, borderBottom: 1, borderColor: "divider" }}
+            >
+              <Tab label={t("preview", "Preview")} />
+              <Tab label={t("markdown_raw", "Markdown")} />
+            </Tabs>
+
+            <Box
+              id="markdown-preview-content"
+              sx={{
+                color: "text.primary",
+                flexGrow: 1,
+                overflowY: "auto",
+                minHeight: 0,
+              }}
+            >
+              {previewTab === 0 ? (
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  rehypePlugins={[rehypeHighlight]}
+                  components={{
+                    h1: ({ ...props }) => (
+                      <Typography variant="h3" gutterBottom {...props} />
+                    ),
+                    h2: ({ ...props }) => (
+                      <Typography variant="h4" gutterBottom {...props} />
+                    ),
+                    h3: ({ ...props }) => (
+                      <Typography variant="h5" gutterBottom {...props} />
+                    ),
+                    p: ({ ...props }) => (
+                      <Typography variant="body1" paragraph {...props} />
+                    ),
+                    ul: ({ ...props }) => (
+                      <Box
+                        component="ul"
+                        sx={{ pl: 4, mb: 2, listStyleType: "disc" }}
+                        {...props}
+                      />
+                    ),
+                    ol: ({ ...props }) => (
+                      <Box
+                        component="ol"
+                        sx={{ pl: 4, mb: 2, listStyleType: "decimal" }}
+                        {...props}
+                      />
+                    ),
+                    li: ({ ...props }) => (
+                      <Typography component="li" variant="body1" {...props} />
+                    ),
+                    a: ({ ...props }) => (
+                      <Link
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        {...props}
+                      />
+                    ),
+                    img: ({ ...props }) => (
+                      <Box
+                        component="img"
+                        sx={{
+                          maxWidth: "100%",
+                          height: "auto",
+                          borderRadius: 1,
+                          my: 1,
+                        }}
+                        {...props}
+                      />
+                    ),
+                    code: ({ ...props }) => (
+                      <code
+                        style={{
+                          backgroundColor: "rgba(255,255,255,0.1)",
+                          padding: "2px 4px",
+                          borderRadius: "4px",
+                        }}
+                        {...props}
+                      />
+                    ),
+                    table: ({ ...props }) => (
+                      <Box
+                        component="table"
+                        sx={{
+                          borderCollapse: "collapse",
+                          width: "100%",
+                          mb: 2,
+                          border: "1px solid",
+                          borderColor: "divider",
+                        }}
+                        {...props}
+                      />
+                    ),
+                    th: ({ ...props }) => (
+                      <Box
+                        component="th"
+                        sx={{
+                          border: "1px solid",
+                          borderColor: "divider",
+                          p: 1,
+                          backgroundColor: "action.hover",
+                          fontWeight: "bold",
+                          textAlign: "left",
+                        }}
+                        {...props}
+                      />
+                    ),
+                    td: ({ ...props }) => (
+                      <Box
+                        component="td"
+                        sx={{
+                          border: "1px solid",
+                          borderColor: "divider",
+                          p: 1,
+                        }}
+                        {...props}
+                      />
+                    ),
+                  }}
+                >
+                  {input}
+                </ReactMarkdown>
+              ) : (
+                <Box
+                  component="pre"
+                  sx={{
+                    whiteSpace: "pre-wrap",
+                    wordBreak: "break-word",
+                    fontFamily: "monospace",
+                    fontSize: "0.875rem",
+                    p: 1,
+                    bgcolor: "action.hover",
+                  }}
+                >
+                  {input}
+                </Box>
+              )}
             </Box>
           </Paper>
         </Grid>

@@ -1,172 +1,86 @@
-import { Box, Typography, Grid } from "@mui/material";
-import { motion, useAnimationControls } from "framer-motion";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  IconButton,
+  Menu,
+  MenuItem,
+  Box,
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import Logo from "../assets/logo.svg";
-import { useBreakpoint } from "../contexts/BreakpointContext";
-import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
-interface HeaderProps {
-  shrink?: boolean;
-}
-
-export default function Header({ shrink = false }: HeaderProps) {
-  const { isXs } = useBreakpoint();
-  return <>{isXs ? <MobileHeader /> : <BigScreenHeader shrink={shrink} />}</>;
-}
-
-// 🖥️ Big screen header with smooth subtitle animation
-function BigScreenHeader({ shrink }: { shrink: boolean }) {
+export default function Header() {
   const { t } = useTranslation();
-  const initialLogoHeight = 80;
-  const initialTitleSize = 32;
-  const initialMarginTop = 48;
-  const initialMarginBottom = 60;
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-  const wrapperControls = useAnimationControls();
-  const logoControls = useAnimationControls();
-  const titleControls = useAnimationControls();
-  const subTitleControls = useAnimationControls();
+  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
 
-  useEffect(() => {
-    async function runAnimations() {
-      await subTitleControls.start(
-        {
-          display: shrink ? "none" : "block",
-          y: shrink ? -10 : 0,
-          height: shrink ? 0 : 10,
-          opacity: shrink ? 0 : 1,
-        },
-        { duration: 0.4, ease: "easeOut" }
-      );
-      await wrapperControls.start(
-        {
-          marginTop: shrink ? 10 : initialMarginTop,
-          marginBottom: shrink ? 10 : initialMarginBottom,
-        },
-        { duration: 0.5, ease: "easeInOut" }
-      );
-      logoControls.start(
-        {
-          height: shrink ? 48 : initialLogoHeight,
-        },
-        { duration: 0.5, ease: "easeInOut" }
-      );
-      titleControls.start(
-        {
-          fontSize: shrink ? 18 : initialTitleSize,
-        },
-        { duration: 0.5, ease: "easeInOut" }
-      );
-    }
-    runAnimations();
-  }, [shrink, wrapperControls, logoControls, titleControls, subTitleControls]);
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
-    <header>
-      <motion.div
-        animate={wrapperControls}
-        initial={{
-          marginTop: shrink ? 10 : initialMarginTop,
-          marginBottom: shrink ? 10 : initialMarginBottom,
-        }}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Box display="flex" flexDirection="row" alignItems="center" gap={0.5}>
-          {/* Logo */}
-          <motion.img
+    <AppBar position="static" color="inherit" elevation={1} sx={{ mb: 4 }}>
+      <Toolbar sx={{ justifyContent: "space-between" }}>
+        {/* Logo and App Name */}
+        <Box
+          component={Link}
+          to="/"
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            textDecoration: "none",
+            color: "inherit",
+          }}
+        >
+          <Box
+            component="img"
             src={Logo}
             alt="Logo"
-            animate={logoControls}
-            initial={{
-              height: initialLogoHeight,
-            }}
-            style={{ width: "auto", objectFit: "contain" }}
+            sx={{ height: 32, mr: 1.5, width: "auto", objectFit: "contain" }}
           />
-          {/* Animate font size of title */}
-          <Box>
-            <Typography
-              component={motion.h3}
-              animate={titleControls}
-              initial={false}
-              variant="h3"
-              color="text.primary"
-              fontWeight="bold"
-            >
-              {t("title")}
-            </Typography>
-          </Box>
+          <Typography variant="h6" component="div" fontWeight="bold">
+            {t("title")}
+          </Typography>
         </Box>
 
-        {/* Title + Subtitle */}
+        {/* Burger Navbar */}
         <Box>
-          {/* Animate subtitle with fade + slide */}
-          <motion.div
-            key="subtitle"
-            animate={subTitleControls}
-            initial={{
-              display: "none",
-              y: -10,
-            }}
+          <IconButton
+            size="large"
+            edge="end"
+            color="inherit"
+            aria-label="menu"
+            onClick={handleMenu}
           >
-            <Typography
-              variant="body1"
-              color="text.secondary"
-              sx={{ fontSize: "1.1rem" }}
+            <MenuIcon />
+          </IconButton>
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            transformOrigin={{ vertical: "top", horizontal: "right" }}
+          >
+            <MenuItem component={Link} to="/json-format" onClick={handleClose}>
+              {t("json_formatter", "JSON Formatter")}
+            </MenuItem>
+            <MenuItem
+              component={Link}
+              to="/markdown-preview"
+              onClick={handleClose}
             >
-              {t("subtitle")}
-            </Typography>
-          </motion.div>
+              {t("markdown_preview", "Markdown Preview")}
+            </MenuItem>
+          </Menu>
         </Box>
-      </motion.div>
-    </header>
-  );
-}
-
-// 📱 Mobile header remains static
-function MobileHeader() {
-  const { t } = useTranslation();
-  return (
-    <Grid
-      container
-      display={{ xs: "flex" }}
-      alignItems="center"
-      spacing={2}
-      sx={{ mb: 2, p: 2 }}
-      component="section"
-    >
-      <Grid size="auto" component="section">
-        <Box
-          component="img"
-          src={Logo}
-          alt="Logo"
-          sx={{ height: 64, width: "auto", objectFit: "contain" }}
-        />
-      </Grid>
-
-      <Grid size="grow" component="section">
-        <Typography
-          variant="h5"
-          color="text.primary"
-          fontWeight="bold"
-          lineHeight={1.2}
-          sx={{ fontSize: "1.5rem" }}
-        >
-          {t("title")}
-        </Typography>
-
-        <Typography
-          variant="body2"
-          color="text.secondary"
-          sx={{ mt: 0.5, fontSize: "0.9rem", lineHeight: 1.3 }}
-        >
-          {t("subtitle")}
-        </Typography>
-      </Grid>
-    </Grid>
+      </Toolbar>
+    </AppBar>
   );
 }
