@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import Footer from "./components/Footer";
 import { Box } from "@mui/material";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import JsonFormatter from "./components/JsonFormatter";
+import JsonFormatter from "./pages/JsonFormatter";
+import MarkdownPreview from "./pages/MarkdownPreview";
 
 export default function App() {
   const [smallTitle, setSmallTitle] = useState(false);
@@ -29,6 +30,10 @@ export default function App() {
           <Route
             path="/json-format"
             element={<JsonFormatter setSmallTitle={setSmallTitle} />}
+          />
+          <Route
+            path="/markdown-preview"
+            element={<MarkdownPreview setSmallTitle={setSmallTitle} />}
           />
           {/* Fallback to root */}
           <Route path="*" element={<Navigate to="/" replace />} />

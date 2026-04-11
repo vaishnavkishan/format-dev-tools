@@ -1,8 +1,8 @@
 import Grid from "@mui/material/Grid";
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import JsonInput from "./JsonInput";
-import JsonOutput from "./JsonOutput";
+import JsonInput from "../components/JsonInput";
+import JsonOutput from "../components/JsonOutput";
 import { useToast } from "../contexts/ToastContext";
 import { DefaultJson } from "../constants";
 
