@@ -321,6 +321,24 @@ export default function MarkdownPreview() {
                     p: ({ ...props }) => (
                       <Typography variant="body1" paragraph {...props} />
                     ),
+                    blockquote: ({ ...props }) => (
+                      <Box
+                        component="blockquote"
+                        sx={{
+                          pl: 2,
+                          py: 1,
+                          my: 2,
+                          mx: 0,
+                          borderLeft: "4px solid",
+                          borderColor: "primary.main",
+                          bgcolor: "action.hover",
+                          fontStyle: "italic",
+                          color: "text.secondary",
+                          "& p:last-child": { mb: 0 },
+                        }}
+                        {...props}
+                      />
+                    ),
                     ul: ({ ...props }) => (
                       <Box
                         component="ul"
