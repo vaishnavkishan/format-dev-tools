@@ -8,11 +8,7 @@ import { DefaultJson } from "../constants";
 
 type FocusTarget = "none" | "input" | "output";
 
-interface JsonFormatterProps {
-  setSmallTitle: (shrink: boolean) => void;
-}
-
-export default function JsonFormatter({ setSmallTitle }: JsonFormatterProps) {
+export default function JsonFormatter() {
   const { t } = useTranslation();
   const [input, setInput] = useState(DefaultJson);
   const [error, setError] = useState(false);
@@ -25,7 +21,6 @@ export default function JsonFormatter({ setSmallTitle }: JsonFormatterProps) {
       const text = await navigator.clipboard.readText();
       setInput(text);
       setError(false);
-      setSmallTitle(true);
     } catch (err) {
       console.error("Failed to read clipboard: ", err);
     }
@@ -53,7 +48,6 @@ export default function JsonFormatter({ setSmallTitle }: JsonFormatterProps) {
 
   function handleFocus(control: FocusTarget) {
     setIsFocused(control);
-    setSmallTitle(true);
   }
 
   function handleBlur() {
@@ -94,7 +88,6 @@ export default function JsonFormatter({ setSmallTitle }: JsonFormatterProps) {
             onBlur={handleBlur}
             onCopy={handleCopy}
             onClear={() => {
-              setSmallTitle(false);
               setInput("");
             }}
           />

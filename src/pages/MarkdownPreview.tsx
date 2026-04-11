@@ -26,13 +26,7 @@ import { DefaultMarkdown } from "../constants";
 import { useToast } from "../contexts/ToastContext";
 import { CopyAll } from "@mui/icons-material";
 
-interface MarkdownPreviewProps {
-  setSmallTitle: (shrink: boolean) => void;
-}
-
-export default function MarkdownPreview({
-  setSmallTitle,
-}: MarkdownPreviewProps) {
+export default function MarkdownPreview() {
   const { t } = useTranslation();
   const [input, setInput] = useState(DefaultMarkdown);
   const [isFocused, setIsFocused] = useState(false);
@@ -45,7 +39,6 @@ export default function MarkdownPreview({
     try {
       const text = await navigator.clipboard.readText();
       setInput(text);
-      setSmallTitle(true);
     } catch (err) {
       console.error("Failed to read clipboard: ", err);
     }
@@ -176,7 +169,6 @@ export default function MarkdownPreview({
                     color="error"
                     onClick={() => {
                       setInput("");
-                      setSmallTitle(false);
                     }}
                     sx={{ "&:hover": { color: "primary.error" } }}
                   >
@@ -193,7 +185,6 @@ export default function MarkdownPreview({
               onChange={(e) => setInput(e.target.value)}
               onFocus={() => {
                 setIsFocused(true);
-                setSmallTitle(true);
               }}
               onBlur={() => setIsFocused(false)}
               inputRef={inputRef}
