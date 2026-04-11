@@ -45,9 +45,30 @@ export default function Header() {
             alt="Logo"
             sx={{ height: 32, mr: 1.5, width: "auto", objectFit: "contain" }}
           />
-          <Typography variant="h6" component="div" fontWeight="bold">
-            {t("title")}
-          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: { xs: "column", sm: "row" },
+              alignItems: { xs: "flex-start", sm: "baseline" },
+              gap: { xs: 0, sm: 1.5 },
+            }}
+          >
+            <Typography
+              variant="h6"
+              component="div"
+              fontWeight="bold"
+              sx={{ lineHeight: 1.2 }}
+            >
+              {t("title")}
+            </Typography>
+            <Typography
+              variant="caption"
+              color="text.secondary"
+              sx={{ opacity: 0.8 }}
+            >
+              {t("tagline", "Ad-free • Offline • Fast")}
+            </Typography>
+          </Box>
         </Box>
 
         {/* Burger Navbar */}
