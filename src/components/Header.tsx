@@ -6,12 +6,45 @@ import {
   Menu,
   MenuItem,
   Box,
+  keyframes,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import Logo from "../assets/logo.svg";
 import { useTranslation } from "react-i18next";
+
+const metallicShine = keyframes`
+  0% {
+    background-position: -150% 0;
+    filter: brightness(1);
+  }
+  5% {
+    filter: brightness(1.5) drop-shadow(0 0 8px rgba(255, 255, 255, 0.4));
+  }
+  10% {
+    background-position: 150% 0;
+    filter: brightness(1);
+  }
+  100% {
+    background-position: 150% 0;
+    filter: brightness(1);
+  }
+`;
+
+const hoverShine = keyframes`
+  from {
+    background-position: -150% 0;
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.8) drop-shadow(0 0 12px rgba(255, 255, 255, 0.6));
+  }
+  to {
+    background-position: 150% 0;
+    filter: brightness(1);
+  }
+`;
 
 export default function Header() {
   const { t } = useTranslation();
@@ -63,8 +96,30 @@ export default function Header() {
             </Typography>
             <Typography
               variant="caption"
-              color="text.secondary"
-              sx={{ opacity: 0.8 }}
+              sx={{
+                fontWeight: 600,
+                letterSpacing: 0.5,
+                background: (theme) => `linear-gradient(
+                  110deg,
+                  ${theme.palette.text.secondary} 35%,
+                  ${theme.palette.primary.light} 45%,
+                  #fff 50%,
+                  ${theme.palette.primary.light} 55%,
+                  ${theme.palette.text.secondary} 65%
+                )`,
+                backgroundSize: "200% 100%",
+                backgroundClip: "text",
+                WebkitBackgroundClip: "text",
+                color: "transparent",
+                animation: `${metallicShine} 30s infinite linear`,
+                "&:hover": {
+                  animation: `${hoverShine} 3s ease-in-out forwards`,
+                  cursor: "default",
+                  opacity: 1,
+                },
+                display: "inline-block",
+                opacity: 0.9,
+              }}
             >
               {t("tagline", "Ad-free • Offline • Fast")}
             </Typography>
