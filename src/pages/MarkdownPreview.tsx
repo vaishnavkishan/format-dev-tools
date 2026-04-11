@@ -122,24 +122,35 @@ export default function MarkdownPreview() {
               </Tabs>
               <Stack direction="row" spacing={1}>
                 <Tooltip
-                  title={t("paste_tooltip", "Paste from clipboard")}
+                  title={t("markdown_paste_tooltip", "Paste from clipboard")}
                   arrow
                 >
                   <IconButton
                     size="small"
                     onClick={handlePaste}
+                    aria-label={t(
+                      "markdown_paste_tooltip",
+                      "Paste from clipboard",
+                    )}
                     sx={{ "&:hover": { color: "primary.main" } }}
                   >
                     <ContentPasteIcon fontSize="small" />
                   </IconButton>
                 </Tooltip>
                 <Tooltip
-                  title={t("copy_markdown_tooltip", "Copy raw Markdown source")}
+                  title={t(
+                    "markdown_copy_raw_tooltip",
+                    "Copy raw Markdown source",
+                  )}
                   arrow
                 >
                   <IconButton
                     size="small"
                     onClick={handleCopy}
+                    aria-label={t(
+                      "markdown_copy_raw_tooltip",
+                      "Copy raw Markdown source",
+                    )}
                     sx={{ "&:hover": { color: "primary.main" } }}
                   >
                     <ContentCopyIcon fontSize="small" />
@@ -147,7 +158,7 @@ export default function MarkdownPreview() {
                 </Tooltip>
                 <Tooltip
                   title={t(
-                    "toggle_view_tooltip",
+                    "markdown_toggle_view_tooltip",
                     "Toggle between Split and Tabbed view",
                   )}
                   arrow
@@ -157,6 +168,10 @@ export default function MarkdownPreview() {
                     onClick={() =>
                       setViewMode((v) => (v === "split" ? "tabbed" : "split"))
                     }
+                    aria-label={t(
+                      "markdown_toggle_view_tooltip",
+                      "Toggle between Split and Tabbed view",
+                    )}
                     sx={{ "&:hover": { color: "primary.main" } }}
                   >
                     {viewMode === "split" ? (
@@ -166,13 +181,17 @@ export default function MarkdownPreview() {
                     )}
                   </IconButton>
                 </Tooltip>
-                <Tooltip title={t("clear", "Clear")} arrow>
+                <Tooltip
+                  title={t("markdown_clear_tooltip", "Clear Content")}
+                  arrow
+                >
                   <IconButton
                     size="small"
                     color="error"
                     onClick={() => {
                       setInput("");
                     }}
+                    aria-label={t("markdown_clear_tooltip", "Clear Content")}
                     sx={{ "&:hover": { color: "primary.error" } }}
                   >
                     <ClearAllIcon fontSize="small" />
@@ -238,34 +257,45 @@ export default function MarkdownPreview() {
                 sx={{ minHeight: "auto" }}
               >
                 <Tab
-                  label={t("preview", "Preview")}
+                  label={t("markdown_preview_tab", "Preview")}
                   sx={{ minHeight: "40px" }}
                 />
                 <Tab
-                  label={t("markdown_raw", "Markdown")}
+                  label={t("markdown_raw_tab", "Markdown Source")}
                   sx={{ minHeight: "40px" }}
                 />
               </Tabs>
               <Stack direction="row" spacing={1}>
                 <Tooltip
-                  title={t("copy_preview_tooltip", "Copy rendered HTML output")}
+                  title={t(
+                    "markdown_copy_preview_tooltip",
+                    "Copy rendered HTML output",
+                  )}
                   arrow
                 >
                   <IconButton
                     size="small"
                     onClick={handleCopyPreview}
+                    aria-label={t(
+                      "markdown_copy_preview_tooltip",
+                      "Copy rendered HTML output",
+                    )}
                     sx={{ "&:hover": { color: "primary.main" } }}
                   >
                     <CopyAll fontSize="small" />
                   </IconButton>
                 </Tooltip>
                 <Tooltip
-                  title={t("copy_markdown_tooltip", "Copy Markdown source")}
+                  title={t("markdown_copy_raw_tooltip", "Copy Markdown source")}
                   arrow
                 >
                   <IconButton
                     size="small"
                     onClick={handleCopy}
+                    aria-label={t(
+                      "markdown_copy_raw_tooltip",
+                      "Copy Markdown source",
+                    )}
                     sx={{ "&:hover": { color: "primary.main" } }}
                   >
                     <ContentCopyIcon fontSize="small" />
@@ -273,7 +303,7 @@ export default function MarkdownPreview() {
                 </Tooltip>
                 <Tooltip
                   title={t(
-                    "toggle_view_tooltip",
+                    "markdown_toggle_view_tooltip",
                     "Toggle between Split and Tabbed view",
                   )}
                   arrow
@@ -283,6 +313,10 @@ export default function MarkdownPreview() {
                     onClick={() =>
                       setViewMode((v) => (v === "split" ? "tabbed" : "split"))
                     }
+                    aria-label={t(
+                      "markdown_toggle_view_tooltip",
+                      "Toggle between Split and Tabbed view",
+                    )}
                     sx={{ "&:hover": { color: "primary.main" } }}
                   >
                     {viewMode === "split" ? (

@@ -1,6 +1,8 @@
 {
-  "title": "Format Dev-Tools",
-  "subtitle": "તમારું JSON સ્થાનિક રીતે ફોર્મેટ, જુઓ અને એક્સપ્લોર કરો",
+  "title": "Format:Dev-Tools",
+  "tagline": "જાહેરાત-મુક્ત • ઑફલાઇન • ઝડપી",
+  "json_formatter": "JSON ફોર્મેટર",
+  "markdown_preview": "માર્કડાઉન પૂર્વાવલોકન",
   "developedBy": "👨🏽‍💻 કિશન વૈષ્ણવ દ્વારા બનાવવામાં આવેલ",
   "github": "GitHub",
   "linkedin": "LinkedIn",
@@ -21,5 +23,16 @@
   "json_input_area": "JSON ઇનપુટ ટેક્સ્ટ વિસ્તાર",
   "json_output_area": "ફોર્મેટ કરેલું JSON આઉટપુટ ટેક્સ્ટ વિસ્તાર",
   "copy_success": "ક્લિપબોર્ડમાં કોપી થયું!",
-  "copy_failure": "ક્લિપબોર્ડમાં કોપી કરવામાં નિષ્ફળ."
+  "copy_failure": "ક્લિપબોર્ડમાં કોપી કરવામાં નિષ્ફળ.",
+  "markdown_input_label": "માર્કડાઉન ઇનપુટ",
+  "markdown_placeholder": "અહીં માર્કડાઉન દાખલ કરો...",
+  "markdown_preview_tab": "પૂર્વાવલોકન",
+  "markdown_raw_tab": "માર્કડાઉન",
+  "markdown_paste_tooltip": "ક્લિપબોર્ડમાંથી પેસ્ટ કરો",
+  "markdown_copy_raw_tooltip": "માર્કડાઉન સ્રોત કોપી કરો",
+  "markdown_copy_preview_tooltip": "રેન્ડર કરેલ HTML કોપી કરો",
+  "markdown_toggle_view_tooltip": "સ્પ્લિટ/ટેબડ વ્યૂ બદલો",
+  "markdown_clear_tooltip": "સામગ્રી સાફ કરો",
+  "menu": "મેનુ",
+  "change_language": "એપ્લિકેશન ભાષા બદલો"
 }

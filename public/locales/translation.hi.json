@@ -1,6 +1,8 @@
 {
-  "title": "Format Dev-Tools",
-  "subtitle": "अपना JSON स्थानीय रूप से फ़ॉर्मेट, देखें और एक्सप्लोर करें",
+  "title": "Format:Dev-Tools",
+  "tagline": "विज्ञापन-मुक्त • ऑफ़लाइन • तेज़",
+  "json_formatter": "JSON फॉर्मेटर",
+  "markdown_preview": "Markdown पूर्वावलोकन",
   "developedBy": "👨🏽‍💻 किशन वैश्णव द्वारा बनाया गया",
   "github": "GitHub",
   "linkedin": "LinkedIn",
@@ -21,5 +23,16 @@
   "json_input_area": "JSON इनपुट टेक्स्ट क्षेत्र",
   "json_output_area": "फ़ॉर्मेट किया हुआ JSON आउटपुट टेक्स्ट क्षेत्र",
   "copy_success": "क्लिपबोर्ड में कॉपी हो गया!",
-  "copy_failure": "क्लिपबोर्ड में कॉपी करने में विफल।"
+  "copy_failure": "क्लिपबोर्ड में कॉपी करने में विफल।",
+  "markdown_input_label": "Markdown इनपुट",
+  "markdown_placeholder": "यहाँ मार्कडाउन दर्ज करें...",
+  "markdown_preview_tab": "पूर्वावलोकन",
+  "markdown_raw_tab": "मार्कडाउन",
+  "markdown_paste_tooltip": "क्लिपबोर्ड से पेस्ट करें",
+  "markdown_copy_raw_tooltip": "मार्कडाउन स्रोत कॉपी करें",
+  "markdown_copy_preview_tooltip": "रेंडर किए गए HTML को कॉपी करें",
+  "markdown_toggle_view_tooltip": "स्प्लिट/टैब्ડ व्यू टॉगल करें",
+  "markdown_clear_tooltip": "सामग्री साफ़ करें",
+  "menu": "मेनू",
+  "change_language": "ऐप की भाषा बदलें"
 }

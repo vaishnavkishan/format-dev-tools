@@ -77,7 +77,7 @@ export default function Header() {
             size="large"
             edge="end"
             color="inherit"
-            aria-label="menu"
+            aria-label={t("menu", "Menu")}
             onClick={handleMenu}
           >
             <MenuIcon />

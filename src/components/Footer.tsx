@@ -63,7 +63,7 @@ export default function Footer() {
           value={currentLang}
           onChange={handleLanguageChange}
           sx={{ minWidth: 100 }}
-          aria-label="Change app language"
+          aria-label={t("change_language", "Change app language")}
         >
           <MenuItem value="en">English (English)</MenuItem>
           <MenuItem value="hi">हिन्दी (Hindi)</MenuItem>
