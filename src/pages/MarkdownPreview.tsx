@@ -6,12 +6,12 @@ import {
   TextField,
   Paper,
   Typography,
-  Button,
   Stack,
   Link,
   Tabs,
   Tab,
   Tooltip,
+  IconButton,
 } from "@mui/material";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -24,6 +24,7 @@ import ViewQuiltIcon from "@mui/icons-material/ViewQuilt";
 import ViewStreamIcon from "@mui/icons-material/ViewStream";
 import { DefaultMarkdown } from "../constants";
 import { useToast } from "../contexts/ToastContext";
+import { CopyAll } from "@mui/icons-material";
 
 interface MarkdownPreviewProps {
   setSmallTitle: (shrink: boolean) => void;
@@ -128,25 +129,25 @@ export default function MarkdownPreview({
                   title={t("paste_tooltip", "Paste from clipboard")}
                   arrow
                 >
-                  <Button
+                  <IconButton
                     size="small"
-                    startIcon={<ContentPasteIcon />}
                     onClick={handlePaste}
+                    sx={{ "&:hover": { color: "primary.main" } }}
                   >
-                    {t("paste", "Paste")}
-                  </Button>
+                    <ContentPasteIcon fontSize="small" />
+                  </IconButton>
                 </Tooltip>
                 <Tooltip
                   title={t("copy_markdown_tooltip", "Copy raw Markdown source")}
                   arrow
                 >
-                  <Button
+                  <IconButton
                     size="small"
-                    startIcon={<ContentCopyIcon />}
                     onClick={handleCopy}
+                    sx={{ "&:hover": { color: "primary.main" } }}
                   >
-                    {t("copy", "Copy")}
-                  </Button>
+                    <ContentCopyIcon fontSize="small" />
+                  </IconButton>
                 </Tooltip>
                 <Tooltip
                   title={t(
@@ -155,35 +156,33 @@ export default function MarkdownPreview({
                   )}
                   arrow
                 >
-                  <Button
+                  <IconButton
                     size="small"
-                    startIcon={
-                      viewMode === "split" ? (
-                        <ViewStreamIcon />
-                      ) : (
-                        <ViewQuiltIcon />
-                      )
-                    }
                     onClick={() =>
                       setViewMode((v) => (v === "split" ? "tabbed" : "split"))
                     }
+                    sx={{ "&:hover": { color: "primary.main" } }}
                   >
-                    {viewMode === "split"
-                      ? t("tabbed", "Tabbed")
-                      : t("split", "Split")}
-                  </Button>
+                    {viewMode === "split" ? (
+                      <ViewStreamIcon fontSize="small" />
+                    ) : (
+                      <ViewQuiltIcon fontSize="small" />
+                    )}
+                  </IconButton>
                 </Tooltip>
-                <Button
-                  size="small"
-                  color="error"
-                  startIcon={<ClearAllIcon />}
-                  onClick={() => {
-                    setInput("");
-                    setSmallTitle(false);
-                  }}
-                >
-                  {t("clear", "Clear")}
-                </Button>
+                <Tooltip title={t("clear", "Clear")} arrow>
+                  <IconButton
+                    size="small"
+                    color="error"
+                    onClick={() => {
+                      setInput("");
+                      setSmallTitle(false);
+                    }}
+                    sx={{ "&:hover": { color: "primary.error" } }}
+                  >
+                    <ClearAllIcon fontSize="small" />
+                  </IconButton>
+                </Tooltip>
               </Stack>
             </Stack>
             <TextField
@@ -244,28 +243,28 @@ export default function MarkdownPreview({
               </Typography>
               <Stack direction="row" spacing={1}>
                 <Tooltip
-                  title={t("copy_markdown_tooltip", "Copy raw Markdown source")}
-                  arrow
-                >
-                  <Button
-                    size="small"
-                    startIcon={<ContentCopyIcon />}
-                    onClick={handleCopy}
-                  >
-                    {t("copy_markdown", "Copy Markdown")}
-                  </Button>
-                </Tooltip>
-                <Tooltip
                   title={t("copy_preview_tooltip", "Copy rendered HTML output")}
                   arrow
                 >
-                  <Button
+                  <IconButton
                     size="small"
-                    startIcon={<ContentCopyIcon />}
                     onClick={handleCopyPreview}
+                    sx={{ "&:hover": { color: "primary.main" } }}
                   >
-                    {t("copy_preview", "Copy Preview")}
-                  </Button>
+                    <CopyAll fontSize="small" />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip
+                  title={t("copy_markdown_tooltip", "Copy Markdown source")}
+                  arrow
+                >
+                  <IconButton
+                    size="small"
+                    onClick={handleCopy}
+                    sx={{ "&:hover": { color: "primary.main" } }}
+                  >
+                    <ContentCopyIcon fontSize="small" />
+                  </IconButton>
                 </Tooltip>
                 <Tooltip
                   title={t(
@@ -274,23 +273,19 @@ export default function MarkdownPreview({
                   )}
                   arrow
                 >
-                  <Button
+                  <IconButton
                     size="small"
-                    startIcon={
-                      viewMode === "split" ? (
-                        <ViewStreamIcon />
-                      ) : (
-                        <ViewQuiltIcon />
-                      )
-                    }
                     onClick={() =>
                       setViewMode((v) => (v === "split" ? "tabbed" : "split"))
                     }
+                    sx={{ "&:hover": { color: "primary.main" } }}
                   >
-                    {viewMode === "split"
-                      ? t("tabbed", "Tabbed")
-                      : t("split", "Split")}
-                  </Button>
+                    {viewMode === "split" ? (
+                      <ViewStreamIcon fontSize="small" />
+                    ) : (
+                      <ViewQuiltIcon fontSize="small" />
+                    )}
+                  </IconButton>
                 </Tooltip>
               </Stack>
             </Stack>
