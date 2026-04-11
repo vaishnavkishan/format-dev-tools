@@ -26,7 +26,7 @@ export default function Header() {
   };
 
   return (
-    <AppBar position="static" color="inherit" elevation={1} sx={{ mb: 4 }}>
+    <AppBar position="static" color="inherit" elevation={1} sx={{ mb: 1 }}>
       <Toolbar sx={{ justifyContent: "space-between" }}>
         {/* Logo and App Name */}
         <Box

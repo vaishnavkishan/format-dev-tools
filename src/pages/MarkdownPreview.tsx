@@ -105,7 +105,7 @@ export default function MarkdownPreview() {
               p: 2,
               display: "flex",
               flexDirection: "column",
-              height: "70vh",
+              height: "80vh",
             }}
           >
             <Stack
@@ -215,7 +215,7 @@ export default function MarkdownPreview() {
             elevation={3}
             sx={{
               p: 3,
-              height: "70vh",
+              height: "80vh",
               display: "flex",
               flexDirection: "column",
               backgroundColor: "background.paper",
