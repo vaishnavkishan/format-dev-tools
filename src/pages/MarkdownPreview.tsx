@@ -114,9 +114,12 @@ export default function MarkdownPreview() {
               alignItems="center"
               mb={1}
             >
-              <Typography variant="overline">
-                {t("markdown_input_label", "Markdown Input")}
-              </Typography>
+              <Tabs value={0} sx={{ minHeight: "auto" }}>
+                <Tab
+                  label={t("markdown_input_label", "Markdown Input")}
+                  sx={{ minHeight: "40px" }}
+                />
+              </Tabs>
               <Stack direction="row" spacing={1}>
                 <Tooltip
                   title={t("paste_tooltip", "Paste from clipboard")}
@@ -229,9 +232,20 @@ export default function MarkdownPreview() {
               alignItems="center"
               mb={1}
             >
-              <Typography variant="overline">
-                {t("markdown_preview_label", "Live Preview")}
-              </Typography>
+              <Tabs
+                value={previewTab}
+                onChange={(_, v) => setPreviewTab(v)}
+                sx={{ minHeight: "auto" }}
+              >
+                <Tab
+                  label={t("preview", "Preview")}
+                  sx={{ minHeight: "40px" }}
+                />
+                <Tab
+                  label={t("markdown_raw", "Markdown")}
+                  sx={{ minHeight: "40px" }}
+                />
+              </Tabs>
               <Stack direction="row" spacing={1}>
                 <Tooltip
                   title={t("copy_preview_tooltip", "Copy rendered HTML output")}
@@ -280,15 +294,6 @@ export default function MarkdownPreview() {
                 </Tooltip>
               </Stack>
             </Stack>
-
-            <Tabs
-              value={previewTab}
-              onChange={(_, v) => setPreviewTab(v)}
-              sx={{ mb: 2, borderBottom: 1, borderColor: "divider" }}
-            >
-              <Tab label={t("preview", "Preview")} />
-              <Tab label={t("markdown_raw", "Markdown")} />
-            </Tabs>
 
             <Box
               id="markdown-preview-content"
