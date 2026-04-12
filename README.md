@@ -69,7 +69,3 @@ A collection of privacy-focused developer tools that process data locally in you
    --source . \
    --overwrite
    ```
-
-```
-
-```

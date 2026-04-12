@@ -10,7 +10,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <Header />
-      <Box mb={"40px"}>
+      <Box mb={8}>
         <Routes>
           <Route path="/" element={<JsonFormatter />} />
           <Route path="/json-format" element={<JsonFormatter />} />

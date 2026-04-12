@@ -134,8 +134,12 @@ export default function Header() {
             color="inherit"
             aria-label={t("menu", "Menu")}
             onClick={handleMenu}
+            sx={{ borderRadius: 1, px: 1.5 }}
           >
             <MenuIcon />
+            <Typography variant="body2" sx={{ ml: 1, fontWeight: 600 }}>
+              {t("more", "More")}
+            </Typography>
           </IconButton>
           <Menu
             anchorEl={anchorEl}
