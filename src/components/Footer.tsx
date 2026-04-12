@@ -12,7 +12,10 @@ import { useTranslation } from "react-i18next";
 export default function Footer() {
   const { i18n, t } = useTranslation();
 
-  const currentLang = i18n.language || "en";
+  // Extract base language (e.g., 'en' from 'en-US') and fallback to 'en'
+  const baseLang = i18n.language?.split("-")[0] || "en";
+  const supportedLangs = ["en", "hi", "gu", "kn"];
+  const currentLang = supportedLangs.includes(baseLang) ? baseLang : "en";
 
   const handleLanguageChange = (event: SelectChangeEvent<string>) => {
     const selectedLang = event.target.value;
