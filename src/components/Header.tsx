@@ -121,7 +121,7 @@ export default function Header() {
                 opacity: 0.9,
               }}
             >
-              {t("tagline", "Ad-free • Offline • Fast")}
+              {t("tagline", "Ad-free • Local • Fast")}
             </Typography>
           </Box>
         </Box>

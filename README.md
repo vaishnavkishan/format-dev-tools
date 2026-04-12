@@ -60,12 +60,16 @@ A collection of privacy-focused developer tools that process data locally in you
 ## Deployment
 
 1. `az login --tenant 348db05a-6454-401f-a262-88a9c511d485`
-1. `yarn build`
-1. `cd dist`
 1. ```
+   yarn build
+   cd dist
    az storage blob upload-batch \
-       --account-name stformatdevtools \
-       --destination '$web' \
-       --source . \
-       --overwrite
+   --account-name stformatdevtools \
+   --destination '$web' \
+   --source . \
+   --overwrite
    ```
+
+```
+
+```
