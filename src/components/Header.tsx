@@ -131,7 +131,7 @@ export default function Header() {
           <IconButton
             size="large"
             edge="end"
-            color="inherit"
+            color="primary"
             aria-label={t("menu", "Menu")}
             onClick={handleMenu}
             sx={{ borderRadius: 1, px: 1.5 }}

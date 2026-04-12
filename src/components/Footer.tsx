@@ -38,27 +38,40 @@ export default function Footer() {
         }}
       >
         {/* Left / Center Content */}
-        <Typography variant="body2">
-          {t("developedBy")}
-          {" • "}
-          <Link
-            href="https://github.com/vaishnavkishan"
-            target="_blank"
-            underline="hover"
-            sx={{ ml: 1 }}
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 0.2 }}>
+          <Typography variant="body2" sx={{ fontWeight: 600 }}>
+            {t("developedBy", "Developed by Kishan Vaishnav")}
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 0.5,
+            }}
           >
-            {t("github")}
-          </Link>
-          {" • "}
-          <Link
-            href="https://www.linkedin.com/in/kishan-vaishnav/"
-            target="_blank"
-            underline="hover"
-            sx={{ ml: 1 }}
-          >
-            {t("linkedin")}
-          </Link>
-        </Typography>
+            <Link
+              href="https://github.com/vaishnavkishan"
+              target="_blank"
+              underline="hover"
+              variant="caption"
+              color="primary"
+            >
+              {t("github", "GitHub")}
+            </Link>
+            <Typography variant="caption" sx={{ mx: 0.5, opacity: 0.6 }}>
+              -
+            </Typography>
+            <Link
+              href="https://www.linkedin.com/in/kishan-vaishnav/"
+              target="_blank"
+              underline="hover"
+              variant="caption"
+              color="primary"
+            >
+              {t("linkedin", "LinkedIn")}
+            </Link>
+          </Box>
+        </Box>
 
         {/* Right Side Language Selector */}
         <Select
