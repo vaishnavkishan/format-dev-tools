@@ -22,8 +22,6 @@ interface ActionBarProps {
 }
 
 const iconButtonSx: SxProps<Theme> = {
-  p: 0.5,
-  minWidth: 32,
   color: "text.secondary",
   "&:hover": { color: "primary.main" },
   "& .MuiSvgIcon-root": { fontSize: "18px" },

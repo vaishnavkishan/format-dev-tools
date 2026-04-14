@@ -101,24 +101,6 @@ export default function JsonOutput({
         />
         <ActionBar
           actions={[
-            ...(showViewToggle
-              ? [
-                  {
-                    key: "toggleView",
-                    tooltip: t(
-                      "json_toggle_view_tooltip",
-                      "Toggle between Split and Tabbed view",
-                    ),
-                    icon:
-                      viewMode === "split" ? (
-                        <ViewStreamIcon fontSize="small" />
-                      ) : (
-                        <ViewQuiltIcon fontSize="small" />
-                      ),
-                    onClick: onToggleView,
-                  },
-                ]
-              : []),
             {
               key: "copy",
               tooltip: t("copy_output_json", "Copy JSON output"),
@@ -151,6 +133,24 @@ export default function JsonOutput({
               icon: <TextIncrease />,
               onClick: increaseFont,
             },
+            ...(showViewToggle
+              ? [
+                  {
+                    key: "toggleView",
+                    tooltip: t(
+                      "json_toggle_view_tooltip",
+                      "Toggle between Split and Tabbed view",
+                    ),
+                    icon:
+                      viewMode === "split" ? (
+                        <ViewStreamIcon fontSize="small" />
+                      ) : (
+                        <ViewQuiltIcon fontSize="small" />
+                      ),
+                    onClick: onToggleView,
+                  },
+                ]
+              : []),
           ]}
         />
       </Stack>

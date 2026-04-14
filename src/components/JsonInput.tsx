@@ -1,5 +1,4 @@
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import CloseIcon from "@mui/icons-material/Close";
 import ViewQuiltIcon from "@mui/icons-material/ViewQuilt";
 import ViewStreamIcon from "@mui/icons-material/ViewStream";
 import { ContentPaste } from "@mui/icons-material";
@@ -11,6 +10,7 @@ import { useEffect, type Ref } from "react";
 import { useTheme } from "@mui/material";
 import { motion, useAnimationControls } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import ClearAllIcon from "@mui/icons-material/ClearAll";
 
 interface JsonInputProps {
   value: string;
@@ -107,15 +107,21 @@ export default function JsonInput({
             {
               key: "paste",
               tooltip: t("paste_input_json", "Paste JSON from clipboard"),
-              icon: <ContentPaste fontSize="small" />,
+              icon: <ContentPaste />,
               onClick: () => onPaste(value),
             },
             {
               key: "clear",
               tooltip: t("clear_json", "Clear JSON"),
-              icon: <CloseIcon fontSize="small" />,
+              icon: <ClearAllIcon />,
               onClick: onClear,
               hoverColor: "error.main",
+            },
+            {
+              key: "copy",
+              tooltip: t("copy_input_json", "Copy input JSON"),
+              icon: <ContentCopyIcon />,
+              onClick: () => onCopy(value),
             },
             ...(showViewToggle
               ? [
@@ -127,20 +133,14 @@ export default function JsonInput({
                     ),
                     icon:
                       viewMode === "split" ? (
-                        <ViewStreamIcon fontSize="small" />
+                        <ViewStreamIcon />
                       ) : (
-                        <ViewQuiltIcon fontSize="small" />
+                        <ViewQuiltIcon />
                       ),
                     onClick: onToggleView,
                   },
                 ]
               : []),
-            {
-              key: "copy",
-              tooltip: t("copy_input_json", "Copy input JSON"),
-              icon: <ContentCopyIcon fontSize="small" />,
-              onClick: () => onCopy(value),
-            },
           ]}
         />
       </Stack>
