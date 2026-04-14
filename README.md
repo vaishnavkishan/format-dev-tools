@@ -66,6 +66,6 @@ A collection of privacy-focused developer tools that process data locally in you
    az storage blob upload-batch \
    --account-name stformatdevtools \
    --destination '$web' \
-   --source . \
+   --source dist \
    --overwrite
    ```

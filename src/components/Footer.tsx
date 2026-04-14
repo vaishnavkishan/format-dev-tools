@@ -59,7 +59,7 @@ export default function Footer() {
               {t("github", "GitHub")}
             </Link>
             <Typography variant="caption" sx={{ mx: 0.5, opacity: 0.6 }}>
-              -
+              •
             </Typography>
             <Link
               href="https://www.linkedin.com/in/kishan-vaishnav/"
