@@ -38,7 +38,14 @@ export default function Footer() {
         }}
       >
         {/* Left / Center Content */}
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 0.2 }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", sm: "row" },
+            gap: 1,
+            alignItems: { xs: "flex-start", sm: "center" },
+          }}
+        >
           <Typography variant="body2" sx={{ fontWeight: 600 }}>
             {t("developedBy", "Developed by Kishan Vaishnav")}
           </Typography>
