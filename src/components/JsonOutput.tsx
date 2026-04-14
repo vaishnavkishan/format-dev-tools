@@ -1,5 +1,8 @@
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import { TextDecrease, TextIncrease } from "@mui/icons-material";
+import TextDecrease from "@mui/icons-material/TextDecrease";
+import TextIncrease from "@mui/icons-material/TextIncrease";
+import ViewQuiltIcon from "@mui/icons-material/ViewQuilt";
+import ViewStreamIcon from "@mui/icons-material/ViewStream";
 import {
   Paper,
   Stack,
@@ -16,6 +19,8 @@ import { useTranslation } from "react-i18next";
 
 interface JsonOutputProps {
   value: string;
+  viewMode: "split" | "tabbed";
+  onToggleView: () => void;
   onCopy: (val: string) => void;
   onFocus?: () => void;
   onBlur?: () => void;
@@ -27,6 +32,8 @@ const MotionJsonTextareaWrapper = motion.create(JsonTextareaWrapper);
 
 export default function JsonOutput({
   value: input,
+  viewMode,
+  onToggleView,
   onCopy,
   onFocus,
   isFocused,
@@ -38,8 +45,8 @@ export default function JsonOutput({
   const controls = useAnimationControls();
   const { t } = useTranslation();
 
-  const [fontSize, setFontSize] = useState(16);
-  const increaseFont = () => setFontSize((prev) => Math.min(prev + 2, 30));
+  const [fontSize, setFontSize] = useState(14);
+  const increaseFont = () => setFontSize((prev) => Math.min(prev + 2, 24));
   const decreaseFont = () => setFontSize((prev) => Math.max(prev - 2, 10));
 
   useEffect(() => {
@@ -72,6 +79,7 @@ export default function JsonOutput({
         display: "flex",
         flexDirection: "column",
         height: "80vh",
+        fontSize: "0.9rem",
       }}
     >
       <Stack
@@ -80,19 +88,58 @@ export default function JsonOutput({
         alignItems="center"
         mb={1}
       >
-        <Tabs value={0} sx={{ minHeight: "auto" }}>
+        <Tabs
+          value={0}
+          sx={{
+            minHeight: "auto",
+            "& .MuiTab-root": {
+              minHeight: 32,
+              fontSize: "0.85rem",
+              px: 1,
+            },
+          }}
+        >
           <Tab
             label={t("json_output_label", "JSON Output")}
-            sx={{ minHeight: "40px" }}
+            sx={{ minHeight: "32px", fontSize: "0.85rem" }}
           />
         </Tabs>
         <Stack direction="row" spacing={1}>
+          <Tooltip
+            title={t(
+              "json_toggle_view_tooltip",
+              "Toggle between Split and Tabbed view",
+            )}
+            arrow
+          >
+            <IconButton
+              size="small"
+              onClick={onToggleView}
+              aria-label={t(
+                "json_toggle_view_tooltip",
+                "Toggle between Split and Tabbed view",
+              )}
+              sx={{
+                "&:hover": { color: "primary.main" },
+                p: 0.75,
+              }}
+            >
+              {viewMode === "split" ? (
+                <ViewStreamIcon fontSize="small" />
+              ) : (
+                <ViewQuiltIcon fontSize="small" />
+              )}
+            </IconButton>
+          </Tooltip>
           <Tooltip title={t("copy_output_json", "Copy JSON output")} arrow>
             <IconButton
               size="small"
               onClick={() => onCopy(formattedInput)}
               aria-label={t("copy_output_json", "Copy JSON output")}
-              sx={{ "&:hover": { color: "primary.main" } }}
+              sx={{
+                "&:hover": { color: "primary.main" },
+                p: 0.75,
+              }}
             >
               <ContentCopyIcon fontSize="small" />
             </IconButton>
@@ -102,7 +149,10 @@ export default function JsonOutput({
               size="small"
               onClick={decreaseFont}
               aria-label={t("decrease_font_size", "Decrease font size")}
-              sx={{ "&:hover": { color: "primary.main" } }}
+              sx={{
+                "&:hover": { color: "primary.main" },
+                p: 0.75,
+              }}
             >
               <TextDecrease />
             </IconButton>
@@ -112,7 +162,10 @@ export default function JsonOutput({
               size="small"
               onClick={increaseFont}
               aria-label={t("increase_font_size", "Increase font size")}
-              sx={{ "&:hover": { color: "primary.main" } }}
+              sx={{
+                "&:hover": { color: "primary.main" },
+                p: 0.75,
+              }}
             >
               <TextIncrease />
             </IconButton>

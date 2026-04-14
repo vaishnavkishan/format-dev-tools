@@ -33,6 +33,16 @@ export default function MarkdownPreview() {
   const [previewTab, setPreviewTab] = useState(0);
   const [viewMode, setViewMode] = useState<"split" | "tabbed">("split");
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
+  const iconButtonSx = {
+    p: 0.5,
+    minWidth: 32,
+    "&:hover": { color: "primary.main" },
+    "& .MuiSvgIcon-root": { fontSize: "18px" },
+  };
+  const iconButtonErrorSx = {
+    ...iconButtonSx,
+    "&:hover": { color: "error.main" },
+  };
   const { showToast } = useToast();
 
   async function handlePaste() {
@@ -94,7 +104,7 @@ export default function MarkdownPreview() {
         container
         justifyContent="center"
         spacing={2}
-        sx={{ p: 2 }}
+        sx={{ p: 2, fontSize: "0.9rem" }}
         alignItems="stretch"
       >
         {/* Input Section */}
@@ -117,7 +127,7 @@ export default function MarkdownPreview() {
               <Tabs value={0} sx={{ minHeight: "auto" }}>
                 <Tab
                   label={t("markdown_input_label", "Markdown Input")}
-                  sx={{ minHeight: "40px" }}
+                  sx={{ minHeight: "32px", fontSize: "0.75rem", px: 1 }}
                 />
               </Tabs>
               <Stack direction="row" spacing={1}>
@@ -132,9 +142,9 @@ export default function MarkdownPreview() {
                       "markdown_paste_tooltip",
                       "Paste from clipboard",
                     )}
-                    sx={{ "&:hover": { color: "primary.main" } }}
+                    sx={iconButtonSx}
                   >
-                    <ContentPasteIcon fontSize="small" />
+                    <ContentPasteIcon />
                   </IconButton>
                 </Tooltip>
                 <Tooltip
@@ -151,9 +161,9 @@ export default function MarkdownPreview() {
                       "markdown_copy_raw_tooltip",
                       "Copy raw Markdown source",
                     )}
-                    sx={{ "&:hover": { color: "primary.main" } }}
+                    sx={iconButtonSx}
                   >
-                    <ContentCopyIcon fontSize="small" />
+                    <ContentCopyIcon />
                   </IconButton>
                 </Tooltip>
                 <Tooltip
@@ -172,12 +182,12 @@ export default function MarkdownPreview() {
                       "markdown_toggle_view_tooltip",
                       "Toggle between Split and Tabbed view",
                     )}
-                    sx={{ "&:hover": { color: "primary.main" } }}
+                    sx={iconButtonSx}
                   >
                     {viewMode === "split" ? (
-                      <ViewStreamIcon fontSize="small" />
+                      <ViewStreamIcon />
                     ) : (
-                      <ViewQuiltIcon fontSize="small" />
+                      <ViewQuiltIcon />
                     )}
                   </IconButton>
                 </Tooltip>
@@ -192,9 +202,9 @@ export default function MarkdownPreview() {
                       setInput("");
                     }}
                     aria-label={t("markdown_clear_tooltip", "Clear Content")}
-                    sx={{ "&:hover": { color: "primary.error" } }}
+                    sx={iconButtonErrorSx}
                   >
-                    <ClearAllIcon fontSize="small" />
+                    <ClearAllIcon />
                   </IconButton>
                 </Tooltip>
               </Stack>
@@ -218,10 +228,12 @@ export default function MarkdownPreview() {
                   height: "100%",
                   alignItems: "flex-start",
                   fontFamily: "monospace",
+                  fontSize: "0.85rem",
                 },
                 "& .MuiInputBase-input": {
                   height: "100% !important",
                   overflow: "auto !important",
+                  fontSize: "0.85rem",
                 },
                 "& .MuiOutlinedInput-notchedOutline": {
                   borderColor: isFocused ? "primary.main" : "divider",
@@ -258,11 +270,11 @@ export default function MarkdownPreview() {
               >
                 <Tab
                   label={t("markdown_preview_tab", "Preview")}
-                  sx={{ minHeight: "40px" }}
+                  sx={{ minHeight: "32px", fontSize: "0.75rem", px: 1 }}
                 />
                 <Tab
                   label={t("markdown_raw_tab", "Markdown Source")}
-                  sx={{ minHeight: "40px" }}
+                  sx={{ minHeight: "32px", fontSize: "0.75rem", px: 1 }}
                 />
               </Tabs>
               <Stack direction="row" spacing={1}>
@@ -280,9 +292,9 @@ export default function MarkdownPreview() {
                       "markdown_copy_preview_tooltip",
                       "Copy rendered HTML output",
                     )}
-                    sx={{ "&:hover": { color: "primary.main" } }}
+                    sx={iconButtonSx}
                   >
-                    <CopyAll fontSize="small" />
+                    <CopyAll />
                   </IconButton>
                 </Tooltip>
                 <Tooltip
@@ -296,9 +308,9 @@ export default function MarkdownPreview() {
                       "markdown_copy_raw_tooltip",
                       "Copy Markdown source",
                     )}
-                    sx={{ "&:hover": { color: "primary.main" } }}
+                    sx={iconButtonSx}
                   >
-                    <ContentCopyIcon fontSize="small" />
+                    <ContentCopyIcon />
                   </IconButton>
                 </Tooltip>
                 <Tooltip
@@ -317,12 +329,12 @@ export default function MarkdownPreview() {
                       "markdown_toggle_view_tooltip",
                       "Toggle between Split and Tabbed view",
                     )}
-                    sx={{ "&:hover": { color: "primary.main" } }}
+                    sx={iconButtonSx}
                   >
                     {viewMode === "split" ? (
-                      <ViewStreamIcon fontSize="small" />
+                      <ViewStreamIcon />
                     ) : (
-                      <ViewQuiltIcon fontSize="small" />
+                      <ViewQuiltIcon />
                     )}
                   </IconButton>
                 </Tooltip>
@@ -336,6 +348,7 @@ export default function MarkdownPreview() {
                 flexGrow: 1,
                 overflowY: "auto",
                 minHeight: 0,
+                fontSize: "0.85rem",
               }}
             >
               {previewTab === 0 ? (

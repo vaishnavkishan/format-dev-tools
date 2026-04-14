@@ -1,5 +1,7 @@
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import CloseIcon from "@mui/icons-material/Close";
+import ViewQuiltIcon from "@mui/icons-material/ViewQuilt";
+import ViewStreamIcon from "@mui/icons-material/ViewStream";
 import { ContentPaste } from "@mui/icons-material";
 import { Paper, Stack, Tabs, Tab, Tooltip, IconButton } from "@mui/material";
 import * as JsonControlStyles from "./JsonControl.styles";
@@ -11,6 +13,8 @@ import { useTranslation } from "react-i18next";
 interface JsonInputProps {
   value: string;
   error?: boolean; // pass directly to MUI
+  viewMode: "split" | "tabbed";
+  onToggleView: () => void;
   onPaste: (val: string) => void;
   onChange: (val: string) => void;
   onCopy: (val: string) => void;
@@ -27,6 +31,8 @@ const MotionJsonTextareaWrapper = motion.create(
 export default function JsonInput({
   value,
   error,
+  viewMode,
+  onToggleView,
   onChange,
   onPaste,
   onFocus,
@@ -74,6 +80,7 @@ export default function JsonInput({
         display: "flex",
         flexDirection: "column",
         height: "80vh",
+        fontSize: "0.9rem",
       }}
     >
       <Stack
@@ -82,10 +89,20 @@ export default function JsonInput({
         alignItems="center"
         mb={1}
       >
-        <Tabs value={0} sx={{ minHeight: "auto" }}>
+        <Tabs
+          value={0}
+          sx={{
+            minHeight: "auto",
+            "& .MuiTab-root": {
+              minHeight: 32,
+              fontSize: "0.85rem",
+              px: 1,
+            },
+          }}
+        >
           <Tab
             label={t("json_input_label", "JSON Input")}
-            sx={{ minHeight: "40px" }}
+            sx={{ minHeight: "32px", fontSize: "0.85rem" }}
           />
         </Tabs>
         <Stack direction="row" spacing={1}>
@@ -97,7 +114,10 @@ export default function JsonInput({
               size="small"
               onClick={() => onPaste(value)}
               aria-label={t("paste_input_json", "Paste JSON from clipboard")}
-              sx={{ "&:hover": { color: "primary.main" } }}
+              sx={{
+                "&:hover": { color: "primary.main" },
+                p: 0.75,
+              }}
             >
               <ContentPaste fontSize="small" />
             </IconButton>
@@ -108,9 +128,39 @@ export default function JsonInput({
               size="small"
               onClick={onClear}
               aria-label={t("clear_json", "Clear JSON")}
-              sx={{ "&:hover": { color: "error.main" } }}
+              sx={{
+                "&:hover": { color: "error.main" },
+                p: 0.75,
+              }}
             >
               <CloseIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
+
+          <Tooltip
+            title={t(
+              "json_toggle_view_tooltip",
+              "Toggle between Split and Tabbed view",
+            )}
+            arrow
+          >
+            <IconButton
+              size="small"
+              onClick={onToggleView}
+              aria-label={t(
+                "json_toggle_view_tooltip",
+                "Toggle between Split and Tabbed view",
+              )}
+              sx={{
+                "&:hover": { color: "primary.main" },
+                p: 0.75,
+              }}
+            >
+              {viewMode === "split" ? (
+                <ViewStreamIcon fontSize="small" />
+              ) : (
+                <ViewQuiltIcon fontSize="small" />
+              )}
             </IconButton>
           </Tooltip>
 
@@ -119,7 +169,10 @@ export default function JsonInput({
               size="small"
               onClick={() => onCopy(value)}
               aria-label={t("copy_input_json", "Copy input JSON")}
-              sx={{ "&:hover": { color: "primary.main" } }}
+              sx={{
+                "&:hover": { color: "primary.main" },
+                p: 0.75,
+              }}
             >
               <ContentCopyIcon fontSize="small" />
             </IconButton>

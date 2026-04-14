@@ -13,6 +13,7 @@ export default function JsonFormatter() {
   const [input, setInput] = useState(DefaultJson);
   const [error, setError] = useState(false);
   const [isFocused, setIsFocused] = useState<FocusTarget>("none");
+  const [viewMode, setViewMode] = useState<"split" | "tabbed">("split");
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
   const { showToast } = useToast();
 
@@ -66,9 +67,10 @@ export default function JsonFormatter() {
         spacing={1}
         alignItems="stretch"
         component="section"
+        sx={{ fontSize: "0.9rem" }}
       >
         <Grid
-          size={{ xs: 12, sm: 6 }}
+          size={viewMode === "split" ? { xs: 12, sm: 6 } : 12}
           display="flex"
           flexDirection="column"
           component="section"
@@ -78,6 +80,10 @@ export default function JsonFormatter() {
             inputRef={inputRef}
             value={input}
             error={error}
+            viewMode={viewMode}
+            onToggleView={() =>
+              setViewMode((v) => (v === "split" ? "tabbed" : "split"))
+            }
             isFocused={isFocused === "input"}
             onPaste={handlePaste}
             onChange={(newValue: string) => {
@@ -93,7 +99,7 @@ export default function JsonFormatter() {
           />
         </Grid>
         <Grid
-          size={{ xs: 12, sm: 6 }}
+          size={viewMode === "split" ? { xs: 12, sm: 6 } : 12}
           display="flex"
           flexDirection="column"
           component="section"
@@ -101,6 +107,10 @@ export default function JsonFormatter() {
           <JsonOutput
             aria-label={t("json_output_area")}
             value={input}
+            viewMode={viewMode}
+            onToggleView={() =>
+              setViewMode((v) => (v === "split" ? "tabbed" : "split"))
+            }
             isFocused={isFocused === "output"}
             onBlur={handleBlur}
             onCopy={handleCopy}

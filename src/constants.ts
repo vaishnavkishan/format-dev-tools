@@ -1,19 +1,16 @@
 export const DefaultJson = `
-    {
-  "string": "Hello World",
+{
+  "string":"Hello World",
     "number": 123,
   "array": [1, 2,3],
-    "object": {
-    "a": "b",
-    "c": "d"
+    "object": {"a": "b", "c": "d"
   },
-  "boolean": true,
+  "boolean":true,
   "null": null
-}
+  }
     `;
 
-export const DefaultMarkdown = `
-# Markdown Preview
+export const DefaultMarkdown = `# Markdown Preview
 
 Welcome to the **Format:Dev-Tools** Markdown editor! All rendering happens locally in your browser.
 

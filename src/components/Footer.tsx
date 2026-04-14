@@ -35,6 +35,7 @@ export default function Footer() {
           position: "fixed",
           bottom: 0,
           width: "100%",
+          fontSize: "0.8rem",
         }}
       >
         {/* Left / Center Content */}
@@ -85,13 +86,21 @@ export default function Footer() {
           size="small"
           value={currentLang}
           onChange={handleLanguageChange}
-          sx={{ minWidth: 100 }}
+          sx={{ minWidth: 100, fontSize: "0.8rem" }}
           aria-label={t("change_language", "Change app language")}
         >
-          <MenuItem value="en">English (English)</MenuItem>
-          <MenuItem value="hi">हिन्दी (Hindi)</MenuItem>
-          <MenuItem value="gu">ગુજરાતી (Gujarati)</MenuItem>
-          <MenuItem value="kn">ಕನ್ನಡ (Kannada)</MenuItem>
+          <MenuItem sx={{ fontSize: "0.8rem" }} value="en">
+            English (English)
+          </MenuItem>
+          <MenuItem sx={{ fontSize: "0.8rem" }} value="hi">
+            हिन्दी (Hindi)
+          </MenuItem>
+          <MenuItem sx={{ fontSize: "0.8rem" }} value="gu">
+            ગુજરાતી (Gujarati)
+          </MenuItem>
+          <MenuItem sx={{ fontSize: "0.8rem" }} value="kn">
+            ಕನ್ನಡ (Kannada)
+          </MenuItem>
         </Select>
       </Box>
     </footer>
