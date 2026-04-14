@@ -5,7 +5,11 @@ A collection of privacy-focused developer tools that process data locally in you
 # Local development
 
 - Clone the repo
-- Make sure node and yarn is installed
+- Make sure Node and Yarn are installed
+- Tested with:
+  - Node `v25.8.2`
+  - Yarn `1.22.22`
+  - React `19.1.1`
 - Run `yarn install`
 - Run `yarn run dev`
 
