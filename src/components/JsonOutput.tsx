@@ -1,13 +1,15 @@
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { TextDecrease, TextIncrease } from "@mui/icons-material";
 import {
-  ActionButtons,
-  CustomIconButton,
-  JsonOutputArea,
-  JsonTextareaWrapper,
-  ToolBar,
-} from "./JsonControl.styles";
-import { Tooltip, useTheme } from "@mui/material";
+  Paper,
+  Stack,
+  Tabs,
+  Tab,
+  Tooltip,
+  IconButton,
+  useTheme,
+} from "@mui/material";
+import { JsonOutputArea, JsonTextareaWrapper } from "./JsonControl.styles";
 import { motion, useAnimationControls } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -36,9 +38,7 @@ export default function JsonOutput({
   const controls = useAnimationControls();
   const { t } = useTranslation();
 
-  // 🧩 Font size state (default 16px)
   const [fontSize, setFontSize] = useState(16);
-
   const increaseFont = () => setFontSize((prev) => Math.min(prev + 2, 30));
   const decreaseFont = () => setFontSize((prev) => Math.max(prev - 2, 10));
 
@@ -65,74 +65,90 @@ export default function JsonOutput({
   }, [controls, isFocused, theme]);
 
   return (
-    <MotionJsonTextareaWrapper
-      animate={controls}
-      initial={false}
+    <Paper
+      elevation={3}
       sx={{
-        maxHeight: "80vh",
+        p: 2,
+        display: "flex",
+        flexDirection: "column",
+        height: "80vh",
       }}
-      onClick={onFocus}
-      onBlur={onBlur}
     >
-      <JsonOutputArea
-        sx={{
-          flexGrow: "inherit",
-          fontSize: `${fontSize}px`, // 👈 Dynamic font size
-        }}
-        dangerouslySetInnerHTML={{
-          __html: input
-            ? formattedInput
-              ? highlightJson(formattedInput)
-              : `<span role="alert" aria-live="assertive" style="color:${theme.palette.error.main.toString()}">${t(
-                  "error_invalid_json"
-                )}</span>`
-            : `<span style="color:${theme.palette.warning.main.toString()}">${t(
-                "no_json_provided"
-              )}</span>`,
-        }}
-      />
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+        mb={1}
+      >
+        <Tabs value={0} sx={{ minHeight: "auto" }}>
+          <Tab
+            label={t("json_output_label", "JSON Output")}
+            sx={{ minHeight: "40px" }}
+          />
+        </Tabs>
+        <Stack direction="row" spacing={1}>
+          <Tooltip title={t("copy_output_json", "Copy JSON output")} arrow>
+            <IconButton
+              size="small"
+              onClick={() => onCopy(formattedInput)}
+              aria-label={t("copy_output_json", "Copy JSON output")}
+              sx={{ "&:hover": { color: "primary.main" } }}
+            >
+              <ContentCopyIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title={t("decrease_font_size", "Decrease font size")} arrow>
+            <IconButton
+              size="small"
+              onClick={decreaseFont}
+              aria-label={t("decrease_font_size", "Decrease font size")}
+              sx={{ "&:hover": { color: "primary.main" } }}
+            >
+              <TextDecrease />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title={t("increase_font_size", "Increase font size")} arrow>
+            <IconButton
+              size="small"
+              onClick={increaseFont}
+              aria-label={t("increase_font_size", "Increase font size")}
+              sx={{ "&:hover": { color: "primary.main" } }}
+            >
+              <TextIncrease />
+            </IconButton>
+          </Tooltip>
+        </Stack>
+      </Stack>
 
-      {/* Copy Button */}
-      <ActionButtons>
-        <Tooltip title={t("copy_output_json")} arrow>
-          <CustomIconButton
-            size="small"
-            onClick={() => {
-              onCopy(formattedInput);
-            }}
-            aria-label={t("copy_output_json")}
-          >
-            <ContentCopyIcon fontSize="small" />
-          </CustomIconButton>
-        </Tooltip>
-      </ActionButtons>
-
-      {/* Toolbar Section */}
-      <ToolBar>
-        <Tooltip title={t("decrease_font_size")} arrow>
-          <CustomIconButton
-            size="small"
-            onClick={decreaseFont}
-            aria-label={t("decrease_font_size")}
-          >
-            <TextDecrease />
-          </CustomIconButton>
-        </Tooltip>
-
-        <Tooltip title={t("increase_font_size")} arrow>
-          <CustomIconButton
-            size="small"
-            onClick={increaseFont}
-            aria-label={t("increase_font_size")}
-          >
-            <TextIncrease />
-          </CustomIconButton>
-        </Tooltip>
-      </ToolBar>
-    </MotionJsonTextareaWrapper>
+      <MotionJsonTextareaWrapper
+        animate={controls}
+        initial={false}
+        sx={{ flexGrow: 1, minHeight: 0 }}
+        onClick={onFocus}
+        onBlur={onBlur}
+      >
+        <JsonOutputArea
+          sx={{
+            flexGrow: 1,
+            minHeight: 0,
+            fontSize: `${fontSize}px`,
+          }}
+          dangerouslySetInnerHTML={{
+            __html: input
+              ? formattedInput
+                ? highlightJson(formattedInput)
+                : `<span role="alert" aria-live="assertive" style="color:${theme.palette.error.main.toString()}">${t(
+                    "error_invalid_json",
+                  )}</span>`
+              : `<span style="color:${theme.palette.warning.main.toString()}">${t(
+                  "no_json_provided",
+                )}</span>`,
+          }}
+        />
+      </MotionJsonTextareaWrapper>
+    </Paper>
   );
 
-  // --- JSON helpers ---
   function formatJson(jsonString: string): string {
     try {
       const parsed = JSON.parse(jsonString);
@@ -144,7 +160,6 @@ export default function JsonOutput({
   }
 }
 
-// --- Syntax Highlight ---
 function highlightJson(jsonString: string): string {
   if (!jsonString) return "";
 
@@ -171,6 +186,6 @@ function highlightJson(jsonString: string): string {
       else if (/null/.test(match)) colorClass = nullColor;
       else if (/^-?\d+/.test(match)) colorClass = numberColor;
       return `<span class="${colorClass}">${match}</span>`;
-    }
+    },
   );
 }

@@ -1,11 +1,11 @@
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import CloseIcon from "@mui/icons-material/Close";
 import { ContentPaste } from "@mui/icons-material";
+import { Paper, Stack, Tabs, Tab, Tooltip, IconButton } from "@mui/material";
 import * as JsonControlStyles from "./JsonControl.styles";
 import { useEffect, type Ref } from "react";
-import { Tooltip, useTheme } from "@mui/material";
+import { useTheme } from "@mui/material";
 import { motion, useAnimationControls } from "framer-motion";
-import { JsonTextArea, JsonTextareaWrapper } from "./JsonControl.styles";
 import { useTranslation } from "react-i18next";
 
 interface JsonInputProps {
@@ -17,11 +17,12 @@ interface JsonInputProps {
   onFocus?: () => void;
   onBlur?: () => void;
   isFocused?: boolean;
-  isError?: boolean;
   onClear: () => void;
   inputRef: Ref<HTMLTextAreaElement | null>;
 }
-const MotionJsonTextareaWrapper = motion.create(JsonTextareaWrapper);
+const MotionJsonTextareaWrapper = motion.create(
+  JsonControlStyles.JsonTextareaWrapper,
+);
 
 export default function JsonInput({
   value,
@@ -33,6 +34,7 @@ export default function JsonInput({
   isFocused,
   onCopy,
   onClear,
+  inputRef,
 }: JsonInputProps) {
   const theme = useTheme();
   const controls = useAnimationControls();
@@ -42,10 +44,8 @@ export default function JsonInput({
     ? theme.palette.error.main
     : theme.palette.primary.main;
 
-  // 🧠 React to focus + error changes
   useEffect(() => {
     if (isFocused) {
-      // Focused → start pulsing animation
       controls.start({
         boxShadow: [
           `${boxColor} 0px 0px 3px 1px`,
@@ -59,7 +59,6 @@ export default function JsonInput({
         },
       });
     } else {
-      // Blur → reset to no shadow
       controls.start({
         boxShadow: "none",
         transition: { duration: 0.3, ease: "easeOut" },
@@ -68,69 +67,102 @@ export default function JsonInput({
   }, [isFocused, error, boxColor, controls]);
 
   return (
-    <MotionJsonTextareaWrapper
-      animate={controls} // 👈 use controlled animation
-      initial={false} // prevent initial flicker
-      id="json-input-wrapper"
-      onClick={onFocus}
+    <Paper
+      elevation={3}
+      sx={{
+        p: 2,
+        display: "flex",
+        flexDirection: "column",
+        height: "80vh",
+      }}
     >
-      {/* Visible or screen-reader-only label */}
-      <label
-        id="json-input-label"
-        htmlFor="json-input-textarea"
-        className="sr-only"
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+        mb={1}
       >
-        {t("json_input_label")}
-      </label>
+        <Tabs value={0} sx={{ minHeight: "auto" }}>
+          <Tab
+            label={t("json_input_label", "JSON Input")}
+            sx={{ minHeight: "40px" }}
+          />
+        </Tabs>
+        <Stack direction="row" spacing={1}>
+          <Tooltip
+            title={t("paste_input_json", "Paste JSON from clipboard")}
+            arrow
+          >
+            <IconButton
+              size="small"
+              onClick={() => onPaste(value)}
+              aria-label={t("paste_input_json", "Paste JSON from clipboard")}
+              sx={{ "&:hover": { color: "primary.main" } }}
+            >
+              <ContentPaste fontSize="small" />
+            </IconButton>
+          </Tooltip>
 
-      {/* Instructions for screen reader users */}
-      <p id="json-input-instructions" className="sr-only">
-        {t("json_input_instructions")}
-      </p>
-      <JsonTextArea
-        id="json-input-textarea"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        onFocus={onFocus}
-        onBlur={onBlur}
-        placeholder={t("json_input_placeholder")}
-        tabIndex={0}
-        style={{ flexGrow: "inherit" }}
-        aria-labelledby="json-input-label"
-        aria-describedby="json-input-instructions"
-        aria-invalid={!!error} // if you're tracking JSON parse errors
-      />
-      <JsonControlStyles.ActionButtons>
-        <Tooltip title={t("paste_input_json")} arrow>
-          <JsonControlStyles.CustomIconButton
-            size="small"
-            onClick={() => onPaste(value)}
-            aria-label={t("paste_input_json")}
-          >
-            <ContentPaste fontSize="small" />
-          </JsonControlStyles.CustomIconButton>
-        </Tooltip>
-        <Tooltip title={t("clear_json")} arrow>
-          <JsonControlStyles.CustomIconButton
-            size="small"
-            onClick={onClear}
-            aria-label={t("clear_json")}
-          >
-            <CloseIcon fontSize="small" />
-          </JsonControlStyles.CustomIconButton>
-        </Tooltip>{" "}
-      </JsonControlStyles.ActionButtons>
-      <JsonControlStyles.ToolBar>
-        <Tooltip title={t("copy_input_json")} arrow>
-          <JsonControlStyles.CustomIconButton
-            size="small"
-            onClick={() => onCopy(value)}
-            aria-label={t("copy_input_json")}
-          >
-            <ContentCopyIcon fontSize="small" />
-          </JsonControlStyles.CustomIconButton>
-        </Tooltip>
-      </JsonControlStyles.ToolBar>
-    </MotionJsonTextareaWrapper>
+          <Tooltip title={t("clear_json", "Clear JSON")} arrow>
+            <IconButton
+              size="small"
+              onClick={onClear}
+              aria-label={t("clear_json", "Clear JSON")}
+              sx={{ "&:hover": { color: "error.main" } }}
+            >
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
+
+          <Tooltip title={t("copy_input_json", "Copy input JSON")} arrow>
+            <IconButton
+              size="small"
+              onClick={() => onCopy(value)}
+              aria-label={t("copy_input_json", "Copy input JSON")}
+              sx={{ "&:hover": { color: "primary.main" } }}
+            >
+              <ContentCopyIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
+        </Stack>
+      </Stack>
+
+      <MotionJsonTextareaWrapper
+        animate={controls}
+        initial={false}
+        onClick={onFocus}
+        sx={{ flexGrow: 1, minHeight: 0 }}
+      >
+        <label
+          id="json-input-label"
+          htmlFor="json-input-textarea"
+          className="sr-only"
+        >
+          {t("json_input_label")}
+        </label>
+
+        <p id="json-input-instructions" className="sr-only">
+          {t("json_input_instructions")}
+        </p>
+
+        <JsonControlStyles.JsonTextArea
+          id="json-input-textarea"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          onFocus={onFocus}
+          onBlur={onBlur}
+          placeholder={t(
+            "json_input_placeholder",
+            "Paste or type JSON here...",
+          )}
+          tabIndex={0}
+          aria-labelledby="json-input-label"
+          aria-describedby="json-input-instructions"
+          aria-invalid={!!error}
+          sx={{ flexGrow: 1 }}
+          ref={inputRef}
+        />
+      </MotionJsonTextareaWrapper>
+    </Paper>
   );
 }
