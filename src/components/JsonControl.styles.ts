@@ -5,11 +5,11 @@ import { Box, IconButton } from "@mui/material";
 export const JsonTextareaWrapper = styled(Box)(() => ({
   position: "relative",
   flex: 1,
-  margin: 8,
+  margin: 0,
   overflow: "hidden", // clip inner scroll
   display: "flex",
   flexDirection: "column",
-  borderRadius: 15,
+  borderRadius: 4,
 }));
 
 export const JsonTextArea = styled("textarea")(({ theme }) => ({
@@ -18,13 +18,13 @@ export const JsonTextArea = styled("textarea")(({ theme }) => ({
   width: "100%",
   resize: "none",
   overflow: "auto",
-  borderRadius: 15,
+  borderRadius: 4,
   borderBottomLeftRadius: 0,
   borderBottomRightRadius: 0,
   boxSizing: "border-box", // ✅ ensures border is counted in total width/height
   appearance: "none", // ✅ removes default OS styles
   outline: "none", // ✅ remove blue highlight
-  border: `2px solid ${theme.palette.divider}`, // ✅ normal border
+  border: `1px solid ${theme.palette.divider}`, // ✅ normal border
 
   backgroundColor: theme.palette.mode === "dark" ? "#1E1E1E" : "#F3F6F9",
   color: theme.palette.text.primary,
@@ -45,10 +45,10 @@ export const JsonTextArea = styled("textarea")(({ theme }) => ({
 
 export const JsonOutputArea = styled(Box)(({ theme }) => ({
   width: "100%",
-  borderRadius: 15,
+  borderRadius: 4,
   borderBottomLeftRadius: 0,
   borderBottomRightRadius: 0,
-  border: `2px solid`,
+  border: `1px solid`,
   borderColor: theme.palette.divider,
   backgroundColor: theme.palette.mode === "dark" ? "#1E1E1E" : "#F3F6F9",
   color: theme.palette.text.primary,
@@ -77,9 +77,9 @@ export const ActionButtons = styled(Box)(({ theme }) => ({
 // Toolbar below textarea
 export const ToolBar = styled(Box)(({ theme }) => ({
   width: "100%",
-  borderWidth: "0 2px 2px 2px",
+  borderWidth: "0 1px 1px 1px",
   borderStyle: "solid",
-  borderRadius: 15,
+  borderRadius: 4,
   borderTopLeftRadius: 0,
   borderTopRightRadius: 0,
   borderColor: theme.palette.divider,

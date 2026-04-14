@@ -41,7 +41,8 @@ A collection of privacy-focused developer tools that process data locally in you
 ## To be implemented
 
 - **Image Handling**: Privacy-safe placeholders or CSP warning systems for external images.
-- **Export Options**: Exporting rendered markdown to PDF or styled HTML files.
+- Do not show split button in small screen where it is not supported
+- Show error details button in action bar when there is an error in input JSON
 
 ### JSON Specific
 
