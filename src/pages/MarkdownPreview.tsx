@@ -198,7 +198,7 @@ export default function MarkdownPreview() {
           <Paper
             elevation={3}
             sx={{
-              p: 3,
+              p: 2,
               height: "80vh",
               display: "flex",
               flexDirection: "column",
@@ -274,6 +274,10 @@ export default function MarkdownPreview() {
                 overflowY: "auto",
                 minHeight: 0,
                 fontSize: "0.85rem",
+                p: 1,
+                border: "1px solid",
+                borderColor: "divider",
+                borderRadius: 1,
               }}
             >
               {previewTab === 0 ? (
