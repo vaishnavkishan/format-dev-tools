@@ -2,6 +2,13 @@
 
 A collection of privacy-focused developer tools that process data locally in your browser without sending it to external servers.
 
+# Local development
+
+- Clone the repo
+- Make sure node and yarn is installed
+- Run `yarn install`
+- Run `yarn run dev`
+
 # Features
 
 ## JSON Formatter/Validator

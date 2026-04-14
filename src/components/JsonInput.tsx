@@ -3,7 +3,9 @@ import CloseIcon from "@mui/icons-material/Close";
 import ViewQuiltIcon from "@mui/icons-material/ViewQuilt";
 import ViewStreamIcon from "@mui/icons-material/ViewStream";
 import { ContentPaste } from "@mui/icons-material";
-import { Paper, Stack, Tabs, Tab, Tooltip, IconButton } from "@mui/material";
+import { Paper, Stack } from "@mui/material";
+import ActionBar from "./ActionBar";
+import SectionTabs from "./SectionTabs";
 import * as JsonControlStyles from "./JsonControl.styles";
 import { useEffect, type Ref } from "react";
 import { useTheme } from "@mui/material";
@@ -89,95 +91,52 @@ export default function JsonInput({
         alignItems="center"
         mb={1}
       >
-        <Tabs
+        <SectionTabs
           value={0}
-          sx={{
-            minHeight: "auto",
-            "& .MuiTab-root": {
-              minHeight: 32,
-              fontSize: "0.85rem",
-              px: 1,
+          tabs={[
+            {
+              value: 0,
+              label: t("json_input_label", "JSON Input"),
             },
-          }}
-        >
-          <Tab
-            label={t("json_input_label", "JSON Input")}
-            sx={{ minHeight: "32px", fontSize: "0.85rem" }}
-          />
-        </Tabs>
-        <Stack direction="row" spacing={1}>
-          <Tooltip
-            title={t("paste_input_json", "Paste JSON from clipboard")}
-            arrow
-          >
-            <IconButton
-              size="small"
-              onClick={() => onPaste(value)}
-              aria-label={t("paste_input_json", "Paste JSON from clipboard")}
-              sx={{
-                "&:hover": { color: "primary.main" },
-                p: 0.75,
-              }}
-            >
-              <ContentPaste fontSize="small" />
-            </IconButton>
-          </Tooltip>
-
-          <Tooltip title={t("clear_json", "Clear JSON")} arrow>
-            <IconButton
-              size="small"
-              onClick={onClear}
-              aria-label={t("clear_json", "Clear JSON")}
-              sx={{
-                "&:hover": { color: "error.main" },
-                p: 0.75,
-              }}
-            >
-              <CloseIcon fontSize="small" />
-            </IconButton>
-          </Tooltip>
-
-          <Tooltip
-            title={t(
-              "json_toggle_view_tooltip",
-              "Toggle between Split and Tabbed view",
-            )}
-            arrow
-          >
-            <IconButton
-              size="small"
-              onClick={onToggleView}
-              aria-label={t(
+          ]}
+        />
+        <ActionBar
+          actions={[
+            {
+              key: "paste",
+              tooltip: t("paste_input_json", "Paste JSON from clipboard"),
+              icon: <ContentPaste fontSize="small" />,
+              onClick: () => onPaste(value),
+            },
+            {
+              key: "clear",
+              tooltip: t("clear_json", "Clear JSON"),
+              icon: <CloseIcon fontSize="small" />,
+              onClick: onClear,
+              hoverColor: "error.main",
+            },
+            {
+              key: "toggleView",
+              tooltip: t(
                 "json_toggle_view_tooltip",
                 "Toggle between Split and Tabbed view",
-              )}
-              sx={{
-                "&:hover": { color: "primary.main" },
-                p: 0.75,
-              }}
-            >
-              {viewMode === "split" ? (
-                <ViewStreamIcon fontSize="small" />
-              ) : (
-                <ViewQuiltIcon fontSize="small" />
-              )}
-            </IconButton>
-          </Tooltip>
-
-          <Tooltip title={t("copy_input_json", "Copy input JSON")} arrow>
-            <IconButton
-              size="small"
-              onClick={() => onCopy(value)}
-              aria-label={t("copy_input_json", "Copy input JSON")}
-              sx={{
-                "&:hover": { color: "primary.main" },
-                p: 0.75,
-              }}
-            >
-              <ContentCopyIcon fontSize="small" />
-            </IconButton>
-          </Tooltip>
-        </Stack>
+              ),
+              icon:
+                viewMode === "split" ? (
+                  <ViewStreamIcon fontSize="small" />
+                ) : (
+                  <ViewQuiltIcon fontSize="small" />
+                ),
+              onClick: onToggleView,
+            },
+            {
+              key: "copy",
+              tooltip: t("copy_input_json", "Copy input JSON"),
+              icon: <ContentCopyIcon fontSize="small" />,
+              onClick: () => onCopy(value),
+            },
+          ]}
+        />
       </Stack>
 
       <MotionJsonTextareaWrapper

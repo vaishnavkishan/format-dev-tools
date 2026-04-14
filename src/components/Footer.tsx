@@ -47,7 +47,7 @@ export default function Footer() {
             alignItems: { xs: "flex-start", sm: "center" },
           }}
         >
-          <Typography variant="body2" sx={{ fontWeight: 600 }}>
+          <Typography variant="body2" sx={{ color: "text.secondary" }}>
             {t("developedBy", "Developed by Kishan Vaishnav")}
           </Typography>
           <Box

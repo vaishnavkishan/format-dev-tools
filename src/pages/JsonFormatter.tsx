@@ -67,7 +67,7 @@ export default function JsonFormatter() {
         spacing={1}
         alignItems="stretch"
         component="section"
-        sx={{ fontSize: "0.9rem" }}
+        sx={{ fontSize: "0.9rem", p: 2 }}
       >
         <Grid
           size={viewMode === "split" ? { xs: 12, sm: 6 } : 12}

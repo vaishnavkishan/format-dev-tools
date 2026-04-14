@@ -3,16 +3,10 @@ import TextDecrease from "@mui/icons-material/TextDecrease";
 import TextIncrease from "@mui/icons-material/TextIncrease";
 import ViewQuiltIcon from "@mui/icons-material/ViewQuilt";
 import ViewStreamIcon from "@mui/icons-material/ViewStream";
-import {
-  Paper,
-  Stack,
-  Tabs,
-  Tab,
-  Tooltip,
-  IconButton,
-  useTheme,
-} from "@mui/material";
+import { Paper, Stack, useTheme } from "@mui/material";
 import { JsonOutputArea, JsonTextareaWrapper } from "./JsonControl.styles";
+import ActionBar from "./ActionBar";
+import SectionTabs from "./SectionTabs";
 import { motion, useAnimationControls } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -88,89 +82,51 @@ export default function JsonOutput({
         alignItems="center"
         mb={1}
       >
-        <Tabs
+        <SectionTabs
           value={0}
-          sx={{
-            minHeight: "auto",
-            "& .MuiTab-root": {
-              minHeight: 32,
-              fontSize: "0.85rem",
-              px: 1,
+          tabs={[
+            {
+              value: 0,
+              label: t("json_output_label", "JSON Output"),
             },
-          }}
-        >
-          <Tab
-            label={t("json_output_label", "JSON Output")}
-            sx={{ minHeight: "32px", fontSize: "0.85rem" }}
-          />
-        </Tabs>
-        <Stack direction="row" spacing={1}>
-          <Tooltip
-            title={t(
-              "json_toggle_view_tooltip",
-              "Toggle between Split and Tabbed view",
-            )}
-            arrow
-          >
-            <IconButton
-              size="small"
-              onClick={onToggleView}
-              aria-label={t(
+          ]}
+        />
+        <ActionBar
+          actions={[
+            {
+              key: "toggleView",
+              tooltip: t(
                 "json_toggle_view_tooltip",
                 "Toggle between Split and Tabbed view",
-              )}
-              sx={{
-                "&:hover": { color: "primary.main" },
-                p: 0.75,
-              }}
-            >
-              {viewMode === "split" ? (
-                <ViewStreamIcon fontSize="small" />
-              ) : (
-                <ViewQuiltIcon fontSize="small" />
-              )}
-            </IconButton>
-          </Tooltip>
-          <Tooltip title={t("copy_output_json", "Copy JSON output")} arrow>
-            <IconButton
-              size="small"
-              onClick={() => onCopy(formattedInput)}
-              aria-label={t("copy_output_json", "Copy JSON output")}
-              sx={{
-                "&:hover": { color: "primary.main" },
-                p: 0.75,
-              }}
-            >
-              <ContentCopyIcon fontSize="small" />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title={t("decrease_font_size", "Decrease font size")} arrow>
-            <IconButton
-              size="small"
-              onClick={decreaseFont}
-              aria-label={t("decrease_font_size", "Decrease font size")}
-              sx={{
-                "&:hover": { color: "primary.main" },
-                p: 0.75,
-              }}
-            >
-              <TextDecrease />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title={t("increase_font_size", "Increase font size")} arrow>
-            <IconButton
-              size="small"
-              onClick={increaseFont}
-              aria-label={t("increase_font_size", "Increase font size")}
-              sx={{
-                "&:hover": { color: "primary.main" },
-                p: 0.75,
-              }}
-            >
-              <TextIncrease />
-            </IconButton>
-          </Tooltip>
-        </Stack>
+              ),
+              icon:
+                viewMode === "split" ? (
+                  <ViewStreamIcon fontSize="small" />
+                ) : (
+                  <ViewQuiltIcon fontSize="small" />
+                ),
+              onClick: onToggleView,
+            },
+            {
+              key: "copy",
+              tooltip: t("copy_output_json", "Copy JSON output"),
+              icon: <ContentCopyIcon fontSize="small" />,
+              onClick: () => onCopy(formattedInput),
+            },
+            {
+              key: "decreaseFont",
+              tooltip: t("decrease_font_size", "Decrease font size"),
+              icon: <TextDecrease />,
+              onClick: decreaseFont,
+            },
+            {
+              key: "increaseFont",
+              tooltip: t("increase_font_size", "Increase font size"),
+              icon: <TextIncrease />,
+              onClick: increaseFont,
+            },
+          ]}
+        />
       </Stack>
 
       <MotionJsonTextareaWrapper

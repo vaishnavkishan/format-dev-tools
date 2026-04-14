@@ -1,18 +1,9 @@
 import Grid from "@mui/material/Grid";
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  Box,
-  TextField,
-  Paper,
-  Typography,
-  Stack,
-  Link,
-  Tabs,
-  Tab,
-  Tooltip,
-  IconButton,
-} from "@mui/material";
+import { Box, TextField, Paper, Typography, Stack, Link } from "@mui/material";
+import ActionBar from "../components/ActionBar";
+import SectionTabs from "../components/SectionTabs";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
@@ -33,16 +24,6 @@ export default function MarkdownPreview() {
   const [previewTab, setPreviewTab] = useState(0);
   const [viewMode, setViewMode] = useState<"split" | "tabbed">("split");
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
-  const iconButtonSx = {
-    p: 0.5,
-    minWidth: 32,
-    "&:hover": { color: "primary.main" },
-    "& .MuiSvgIcon-root": { fontSize: "18px" },
-  };
-  const iconButtonErrorSx = {
-    ...iconButtonSx,
-    "&:hover": { color: "error.main" },
-  };
   const { showToast } = useToast();
 
   async function handlePaste() {
@@ -124,90 +105,59 @@ export default function MarkdownPreview() {
               alignItems="center"
               mb={1}
             >
-              <Tabs value={0} sx={{ minHeight: "auto" }}>
-                <Tab
-                  label={t("markdown_input_label", "Markdown Input")}
-                  sx={{ minHeight: "32px", fontSize: "0.75rem", px: 1 }}
-                />
-              </Tabs>
-              <Stack direction="row" spacing={1}>
-                <Tooltip
-                  title={t("markdown_paste_tooltip", "Paste from clipboard")}
-                  arrow
-                >
-                  <IconButton
-                    size="small"
-                    onClick={handlePaste}
-                    aria-label={t(
+              <SectionTabs
+                value={0}
+                tabs={[
+                  {
+                    value: 0,
+                    label: t("markdown_input_label", "Markdown Input"),
+                  },
+                ]}
+              />
+              <ActionBar
+                actions={[
+                  {
+                    key: "paste",
+                    tooltip: t(
                       "markdown_paste_tooltip",
                       "Paste from clipboard",
-                    )}
-                    sx={iconButtonSx}
-                  >
-                    <ContentPasteIcon />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip
-                  title={t(
-                    "markdown_copy_raw_tooltip",
-                    "Copy raw Markdown source",
-                  )}
-                  arrow
-                >
-                  <IconButton
-                    size="small"
-                    onClick={handleCopy}
-                    aria-label={t(
+                    ),
+                    icon: <ContentPasteIcon />,
+                    onClick: handlePaste,
+                  },
+                  {
+                    key: "copyRaw",
+                    tooltip: t(
                       "markdown_copy_raw_tooltip",
                       "Copy raw Markdown source",
-                    )}
-                    sx={iconButtonSx}
-                  >
-                    <ContentCopyIcon />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip
-                  title={t(
-                    "markdown_toggle_view_tooltip",
-                    "Toggle between Split and Tabbed view",
-                  )}
-                  arrow
-                >
-                  <IconButton
-                    size="small"
-                    onClick={() =>
-                      setViewMode((v) => (v === "split" ? "tabbed" : "split"))
-                    }
-                    aria-label={t(
+                    ),
+                    icon: <ContentCopyIcon />,
+                    onClick: handleCopy,
+                  },
+                  {
+                    key: "toggleView",
+                    tooltip: t(
                       "markdown_toggle_view_tooltip",
                       "Toggle between Split and Tabbed view",
-                    )}
-                    sx={iconButtonSx}
-                  >
-                    {viewMode === "split" ? (
-                      <ViewStreamIcon />
-                    ) : (
-                      <ViewQuiltIcon />
-                    )}
-                  </IconButton>
-                </Tooltip>
-                <Tooltip
-                  title={t("markdown_clear_tooltip", "Clear Content")}
-                  arrow
-                >
-                  <IconButton
-                    size="small"
-                    color="error"
-                    onClick={() => {
-                      setInput("");
-                    }}
-                    aria-label={t("markdown_clear_tooltip", "Clear Content")}
-                    sx={iconButtonErrorSx}
-                  >
-                    <ClearAllIcon />
-                  </IconButton>
-                </Tooltip>
-              </Stack>
+                    ),
+                    icon:
+                      viewMode === "split" ? (
+                        <ViewStreamIcon />
+                      ) : (
+                        <ViewQuiltIcon />
+                      ),
+                    onClick: () =>
+                      setViewMode((v) => (v === "split" ? "tabbed" : "split")),
+                  },
+                  {
+                    key: "clear",
+                    tooltip: t("markdown_clear_tooltip", "Clear Content"),
+                    icon: <ClearAllIcon />,
+                    onClick: () => setInput(""),
+                    hoverColor: "error.main",
+                  },
+                ]}
+              />
             </Stack>
             <TextField
               multiline
@@ -263,82 +213,57 @@ export default function MarkdownPreview() {
               alignItems="center"
               mb={1}
             >
-              <Tabs
+              <SectionTabs
                 value={previewTab}
-                onChange={(_, v) => setPreviewTab(v)}
-                sx={{ minHeight: "auto" }}
-              >
-                <Tab
-                  label={t("markdown_preview_tab", "Preview")}
-                  sx={{ minHeight: "32px", fontSize: "0.75rem", px: 1 }}
-                />
-                <Tab
-                  label={t("markdown_raw_tab", "Markdown Source")}
-                  sx={{ minHeight: "32px", fontSize: "0.75rem", px: 1 }}
-                />
-              </Tabs>
-              <Stack direction="row" spacing={1}>
-                <Tooltip
-                  title={t(
-                    "markdown_copy_preview_tooltip",
-                    "Copy rendered HTML output",
-                  )}
-                  arrow
-                >
-                  <IconButton
-                    size="small"
-                    onClick={handleCopyPreview}
-                    aria-label={t(
+                onChange={(_, v) => setPreviewTab(Number(v))}
+                tabs={[
+                  {
+                    value: 0,
+                    label: t("markdown_preview_tab", "Preview"),
+                  },
+                  {
+                    value: 1,
+                    label: t("markdown_raw_tab", "Markdown Source"),
+                  },
+                ]}
+              />
+              <ActionBar
+                actions={[
+                  {
+                    key: "copyPreview",
+                    tooltip: t(
                       "markdown_copy_preview_tooltip",
                       "Copy rendered HTML output",
-                    )}
-                    sx={iconButtonSx}
-                  >
-                    <CopyAll />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip
-                  title={t("markdown_copy_raw_tooltip", "Copy Markdown source")}
-                  arrow
-                >
-                  <IconButton
-                    size="small"
-                    onClick={handleCopy}
-                    aria-label={t(
+                    ),
+                    icon: <CopyAll />,
+                    onClick: handleCopyPreview,
+                  },
+                  {
+                    key: "copyRawPreview",
+                    tooltip: t(
                       "markdown_copy_raw_tooltip",
                       "Copy Markdown source",
-                    )}
-                    sx={iconButtonSx}
-                  >
-                    <ContentCopyIcon />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip
-                  title={t(
-                    "markdown_toggle_view_tooltip",
-                    "Toggle between Split and Tabbed view",
-                  )}
-                  arrow
-                >
-                  <IconButton
-                    size="small"
-                    onClick={() =>
-                      setViewMode((v) => (v === "split" ? "tabbed" : "split"))
-                    }
-                    aria-label={t(
+                    ),
+                    icon: <ContentCopyIcon />,
+                    onClick: handleCopy,
+                  },
+                  {
+                    key: "toggleViewPreview",
+                    tooltip: t(
                       "markdown_toggle_view_tooltip",
                       "Toggle between Split and Tabbed view",
-                    )}
-                    sx={iconButtonSx}
-                  >
-                    {viewMode === "split" ? (
-                      <ViewStreamIcon />
-                    ) : (
-                      <ViewQuiltIcon />
-                    )}
-                  </IconButton>
-                </Tooltip>
-              </Stack>
+                    ),
+                    icon:
+                      viewMode === "split" ? (
+                        <ViewStreamIcon />
+                      ) : (
+                        <ViewQuiltIcon />
+                      ),
+                    onClick: () =>
+                      setViewMode((v) => (v === "split" ? "tabbed" : "split")),
+                  },
+                ]}
+              />
             </Stack>
 
             <Box
