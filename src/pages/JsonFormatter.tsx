@@ -1,5 +1,6 @@
 import Grid from "@mui/material/Grid";
-import { useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useTheme, useMediaQuery } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import JsonInput from "../components/JsonInput";
 import JsonOutput from "../components/JsonOutput";
@@ -9,18 +10,61 @@ import { DefaultJson } from "../constants";
 type FocusTarget = "none" | "input" | "output";
 
 export default function JsonFormatter() {
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const { t } = useTranslation();
   const [input, setInput] = useState(DefaultJson);
   const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [isFocused, setIsFocused] = useState<FocusTarget>("none");
   const [viewMode, setViewMode] = useState<"split" | "tabbed">("split");
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
   const { showToast } = useToast();
+  const showViewToggle = !isSmallScreen;
+
+  useEffect(() => {
+    if (isSmallScreen && viewMode === "split") {
+      setViewMode("tabbed");
+    }
+  }, [isSmallScreen, viewMode]);
+
+  const formattedInput = useMemo(() => {
+    try {
+      return JSON.stringify(JSON.parse(input), null, 2);
+    } catch {
+      return "";
+    }
+  }, [input]);
+
+  useEffect(() => {
+    if (!input.trim()) {
+      setError(false);
+      setErrorMessage("");
+      return;
+    }
+
+    try {
+      JSON.parse(input);
+      setError(false);
+      setErrorMessage("");
+    } catch (err) {
+      setError(true);
+      setErrorMessage(
+        err instanceof Error ? err.message : String(err ?? "Invalid JSON"),
+      );
+    }
+  }, [input]);
+
+  const sanitizeJsonClipboard = (value: string) =>
+    value
+      .replace(/&/g, "\\u0026")
+      .replace(/</g, "\\u003c")
+      .replace(/>/g, "\\u003e");
 
   async function handlePaste() {
     try {
       const text = await navigator.clipboard.readText();
-      setInput(text);
+      setInput(sanitizeJsonClipboard(text));
       setError(false);
     } catch (err) {
       console.error("Failed to read clipboard: ", err);
@@ -55,10 +99,6 @@ export default function JsonFormatter() {
     setIsFocused("none");
   }
 
-  function handleError() {
-    setError(true);
-  }
-
   return (
     <main>
       <Grid
@@ -81,13 +121,13 @@ export default function JsonFormatter() {
             value={input}
             error={error}
             viewMode={viewMode}
+            showViewToggle={showViewToggle}
             onToggleView={() =>
               setViewMode((v) => (v === "split" ? "tabbed" : "split"))
             }
             isFocused={isFocused === "input"}
             onPaste={handlePaste}
             onChange={(newValue: string) => {
-              setError(false);
               setInput(newValue);
             }}
             onFocus={() => handleFocus("input")}
@@ -107,7 +147,11 @@ export default function JsonFormatter() {
           <JsonOutput
             aria-label={t("json_output_area")}
             value={input}
+            formattedValue={formattedInput}
+            error={error}
+            errorMessage={errorMessage}
             viewMode={viewMode}
+            showViewToggle={showViewToggle}
             onToggleView={() =>
               setViewMode((v) => (v === "split" ? "tabbed" : "split"))
             }
@@ -115,7 +159,15 @@ export default function JsonFormatter() {
             onBlur={handleBlur}
             onCopy={handleCopy}
             onFocus={() => handleFocus("output")}
-            onError={handleError}
+            onShowErrorDetails={() => {
+              if (errorMessage) {
+                showToast({
+                  message: errorMessage,
+                  type: "error",
+                  duration: 4000,
+                });
+              }
+            }}
           />
         </Grid>
       </Grid>

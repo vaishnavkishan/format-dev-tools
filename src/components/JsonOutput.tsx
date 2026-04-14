@@ -1,9 +1,10 @@
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import TextDecrease from "@mui/icons-material/TextDecrease";
 import TextIncrease from "@mui/icons-material/TextIncrease";
 import ViewQuiltIcon from "@mui/icons-material/ViewQuilt";
 import ViewStreamIcon from "@mui/icons-material/ViewStream";
-import { Paper, Stack, useTheme } from "@mui/material";
+import { Box, Paper, Stack, Typography, useTheme } from "@mui/material";
 import { JsonOutputArea, JsonTextareaWrapper } from "./JsonControl.styles";
 import ActionBar from "./ActionBar";
 import SectionTabs from "./SectionTabs";
@@ -13,12 +14,16 @@ import { useTranslation } from "react-i18next";
 
 interface JsonOutputProps {
   value: string;
+  formattedValue: string;
   viewMode: "split" | "tabbed";
+  showViewToggle?: boolean;
+  error?: boolean;
+  errorMessage?: string;
   onToggleView: () => void;
   onCopy: (val: string) => void;
   onFocus?: () => void;
   onBlur?: () => void;
-  onError: () => void;
+  onShowErrorDetails?: () => void;
   isFocused?: boolean;
 }
 
@@ -26,15 +31,18 @@ const MotionJsonTextareaWrapper = motion.create(JsonTextareaWrapper);
 
 export default function JsonOutput({
   value: input,
+  formattedValue,
   viewMode,
+  showViewToggle,
+  error,
+  errorMessage,
   onToggleView,
   onCopy,
   onFocus,
   isFocused,
   onBlur,
-  onError,
+  onShowErrorDetails,
 }: JsonOutputProps) {
-  const formattedInput = formatJson(input);
   const theme = useTheme();
   const controls = useAnimationControls();
   const { t } = useTranslation();
@@ -93,26 +101,44 @@ export default function JsonOutput({
         />
         <ActionBar
           actions={[
-            {
-              key: "toggleView",
-              tooltip: t(
-                "json_toggle_view_tooltip",
-                "Toggle between Split and Tabbed view",
-              ),
-              icon:
-                viewMode === "split" ? (
-                  <ViewStreamIcon fontSize="small" />
-                ) : (
-                  <ViewQuiltIcon fontSize="small" />
-                ),
-              onClick: onToggleView,
-            },
+            ...(showViewToggle
+              ? [
+                  {
+                    key: "toggleView",
+                    tooltip: t(
+                      "json_toggle_view_tooltip",
+                      "Toggle between Split and Tabbed view",
+                    ),
+                    icon:
+                      viewMode === "split" ? (
+                        <ViewStreamIcon fontSize="small" />
+                      ) : (
+                        <ViewQuiltIcon fontSize="small" />
+                      ),
+                    onClick: onToggleView,
+                  },
+                ]
+              : []),
             {
               key: "copy",
               tooltip: t("copy_output_json", "Copy JSON output"),
               icon: <ContentCopyIcon fontSize="small" />,
-              onClick: () => onCopy(formattedInput),
+              onClick: () => onCopy(formattedValue),
             },
+            ...(error && onShowErrorDetails
+              ? [
+                  {
+                    key: "errorDetails",
+                    tooltip: t(
+                      "show_json_error_details",
+                      "Show JSON error details",
+                    ),
+                    icon: <ErrorOutlineIcon fontSize="small" />,
+                    onClick: onShowErrorDetails,
+                    hoverColor: "error.main",
+                  },
+                ]
+              : []),
             {
               key: "decreaseFont",
               tooltip: t("decrease_font_size", "Decrease font size"),
@@ -144,8 +170,8 @@ export default function JsonOutput({
           }}
           dangerouslySetInnerHTML={{
             __html: input
-              ? formattedInput
-                ? highlightJson(formattedInput)
+              ? formattedValue
+                ? highlightJson(formattedValue)
                 : `<span role="alert" aria-live="assertive" style="color:${theme.palette.error.main.toString()}">${t(
                     "error_invalid_json",
                   )}</span>`
@@ -155,18 +181,23 @@ export default function JsonOutput({
           }}
         />
       </MotionJsonTextareaWrapper>
+      {error && errorMessage ? (
+        <Box
+          sx={{
+            mt: 2,
+            p: 1,
+            borderRadius: 1,
+            bgcolor: "error.100",
+            color: "error.main",
+          }}
+        >
+          <Typography variant="body2">
+            {t("invalid_json_error_details", "Invalid JSON:")} {errorMessage}
+          </Typography>
+        </Box>
+      ) : null}
     </Paper>
   );
-
-  function formatJson(jsonString: string): string {
-    try {
-      const parsed = JSON.parse(jsonString);
-      return JSON.stringify(parsed, null, 2);
-    } catch {
-      onError();
-      return "";
-    }
-  }
 }
 
 function highlightJson(jsonString: string): string {

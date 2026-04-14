@@ -1,7 +1,17 @@
+import DOMPurify from "dompurify";
 import Grid from "@mui/material/Grid";
-import { useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Box, TextField, Paper, Typography, Stack, Link } from "@mui/material";
+import {
+  Box,
+  TextField,
+  Paper,
+  Typography,
+  Stack,
+  Link,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import ActionBar from "../components/ActionBar";
 import SectionTabs from "../components/SectionTabs";
 import ReactMarkdown from "react-markdown";
@@ -19,17 +29,35 @@ import { CopyAll } from "@mui/icons-material";
 
 export default function MarkdownPreview() {
   const { t } = useTranslation();
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const [input, setInput] = useState(DefaultMarkdown);
   const [isFocused, setIsFocused] = useState(false);
   const [previewTab, setPreviewTab] = useState(0);
   const [viewMode, setViewMode] = useState<"split" | "tabbed">("split");
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
   const { showToast } = useToast();
+  const showViewToggle = !isSmallScreen;
+
+  useEffect(() => {
+    if (isSmallScreen && viewMode === "split") {
+      setViewMode("tabbed");
+    }
+  }, [isSmallScreen, viewMode]);
+
+  const sanitizedClipboardMarkdown = useMemo(
+    () => (value: string) =>
+      DOMPurify.sanitize(value, {
+        ALLOWED_TAGS: [],
+        ALLOWED_ATTR: [],
+      }),
+    [],
+  );
 
   async function handlePaste() {
     try {
       const text = await navigator.clipboard.readText();
-      setInput(text);
+      setInput(sanitizedClipboardMarkdown(text));
     } catch (err) {
       console.error("Failed to read clipboard: ", err);
     }
@@ -134,21 +162,27 @@ export default function MarkdownPreview() {
                     icon: <ContentCopyIcon />,
                     onClick: handleCopy,
                   },
-                  {
-                    key: "toggleView",
-                    tooltip: t(
-                      "markdown_toggle_view_tooltip",
-                      "Toggle between Split and Tabbed view",
-                    ),
-                    icon:
-                      viewMode === "split" ? (
-                        <ViewStreamIcon />
-                      ) : (
-                        <ViewQuiltIcon />
-                      ),
-                    onClick: () =>
-                      setViewMode((v) => (v === "split" ? "tabbed" : "split")),
-                  },
+                  ...(showViewToggle
+                    ? [
+                        {
+                          key: "toggleView",
+                          tooltip: t(
+                            "markdown_toggle_view_tooltip",
+                            "Toggle between Split and Tabbed view",
+                          ),
+                          icon:
+                            viewMode === "split" ? (
+                              <ViewStreamIcon />
+                            ) : (
+                              <ViewQuiltIcon />
+                            ),
+                          onClick: () =>
+                            setViewMode((v) =>
+                              v === "split" ? "tabbed" : "split",
+                            ),
+                        },
+                      ]
+                    : []),
                   {
                     key: "clear",
                     tooltip: t("markdown_clear_tooltip", "Clear Content"),
@@ -247,21 +281,27 @@ export default function MarkdownPreview() {
                     icon: <ContentCopyIcon />,
                     onClick: handleCopy,
                   },
-                  {
-                    key: "toggleViewPreview",
-                    tooltip: t(
-                      "markdown_toggle_view_tooltip",
-                      "Toggle between Split and Tabbed view",
-                    ),
-                    icon:
-                      viewMode === "split" ? (
-                        <ViewStreamIcon />
-                      ) : (
-                        <ViewQuiltIcon />
-                      ),
-                    onClick: () =>
-                      setViewMode((v) => (v === "split" ? "tabbed" : "split")),
-                  },
+                  ...(showViewToggle
+                    ? [
+                        {
+                          key: "toggleViewPreview",
+                          tooltip: t(
+                            "markdown_toggle_view_tooltip",
+                            "Toggle between Split and Tabbed view",
+                          ),
+                          icon:
+                            viewMode === "split" ? (
+                              <ViewStreamIcon />
+                            ) : (
+                              <ViewQuiltIcon />
+                            ),
+                          onClick: () =>
+                            setViewMode((v) =>
+                              v === "split" ? "tabbed" : "split",
+                            ),
+                        },
+                      ]
+                    : []),
                 ]}
               />
             </Stack>
@@ -339,18 +379,59 @@ export default function MarkdownPreview() {
                         {...props}
                       />
                     ),
-                    img: ({ ...props }) => (
-                      <Box
-                        component="img"
-                        sx={{
-                          maxWidth: "100%",
-                          height: "auto",
-                          borderRadius: 1,
-                          my: 1,
-                        }}
-                        {...props}
-                      />
-                    ),
+                    img: ({ src, alt, title, ...props }) => {
+                      const hasRemoteUrl =
+                        typeof src === "string" && /^(https?:)?\/\//.test(src);
+
+                      if (hasRemoteUrl) {
+                        return (
+                          <Box
+                            sx={{
+                              p: 2,
+                              my: 2,
+                              borderRadius: 1,
+                              border: "1px dashed",
+                              borderColor: "divider",
+                              bgcolor: "background.default",
+                            }}
+                          >
+                            <Typography variant="body2" color="text.secondary">
+                              {t(
+                                "external_image_blocked",
+                                "External images are blocked for privacy.",
+                              )}
+                            </Typography>
+                            <Typography
+                              variant="caption"
+                              color="text.secondary"
+                            >
+                              {alt ||
+                                title ||
+                                t(
+                                  "image_placeholder_text",
+                                  "Image placeholder",
+                                )}
+                            </Typography>
+                          </Box>
+                        );
+                      }
+
+                      return (
+                        <Box
+                          component="img"
+                          src={src}
+                          alt={alt}
+                          title={title}
+                          sx={{
+                            maxWidth: "100%",
+                            height: "auto",
+                            borderRadius: 1,
+                            my: 1,
+                          }}
+                          {...props}
+                        />
+                      );
+                    },
                     code: ({ ...props }) => (
                       <code
                         style={{

@@ -16,6 +16,7 @@ interface JsonInputProps {
   value: string;
   error?: boolean; // pass directly to MUI
   viewMode: "split" | "tabbed";
+  showViewToggle?: boolean;
   onToggleView: () => void;
   onPaste: (val: string) => void;
   onChange: (val: string) => void;
@@ -34,6 +35,7 @@ export default function JsonInput({
   value,
   error,
   viewMode,
+  showViewToggle,
   onToggleView,
   onChange,
   onPaste,
@@ -115,20 +117,24 @@ export default function JsonInput({
               onClick: onClear,
               hoverColor: "error.main",
             },
-            {
-              key: "toggleView",
-              tooltip: t(
-                "json_toggle_view_tooltip",
-                "Toggle between Split and Tabbed view",
-              ),
-              icon:
-                viewMode === "split" ? (
-                  <ViewStreamIcon fontSize="small" />
-                ) : (
-                  <ViewQuiltIcon fontSize="small" />
-                ),
-              onClick: onToggleView,
-            },
+            ...(showViewToggle
+              ? [
+                  {
+                    key: "toggleView",
+                    tooltip: t(
+                      "json_toggle_view_tooltip",
+                      "Toggle between Split and Tabbed view",
+                    ),
+                    icon:
+                      viewMode === "split" ? (
+                        <ViewStreamIcon fontSize="small" />
+                      ) : (
+                        <ViewQuiltIcon fontSize="small" />
+                      ),
+                    onClick: onToggleView,
+                  },
+                ]
+              : []),
             {
               key: "copy",
               tooltip: t("copy_input_json", "Copy input JSON"),

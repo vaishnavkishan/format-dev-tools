@@ -41,12 +41,17 @@ A collection of privacy-focused developer tools that process data locally in you
 - Multi-language support using `i18next`
 - Local storage sync for state persistence (aligned with "Focus Mode")
 - Tooltips and Keyboard shortcuts for common actions (e.g., Clear, Paste, Switch Views)
-
-## To be implemented
-
+- Always sanitize the input of both JSON and markdown
 - **Image Handling**: Privacy-safe placeholders or CSP warning systems for external images.
 - Do not show split button in small screen where it is not supported
 - Show error details button in action bar when there is an error in input JSON
+
+## To be implemented
+
+- circle shadow on button hover
+- help users identify errors by showing current line number and column. highlight error segment
+- validate markdown
+- allow users to download/install the app as spa, so that it works even when offline
 
 ### JSON Specific
 
