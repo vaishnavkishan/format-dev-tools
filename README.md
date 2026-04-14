@@ -81,3 +81,47 @@ A collection of privacy-focused developer tools that process data locally in you
    --source dist \
    --overwrite
    ```
+
+## Docker & Azure Container Apps
+
+This project includes a production Dockerfile that builds the app with Yarn and serves the generated static site through NGINX.
+
+### Build and push to Docker Hub
+
+1. Build the Docker image locally:
+   ```bash
+   docker build -t <dockerhub-username>/format-dev-tools:latest .
+   ```
+2. Log in to Docker Hub:
+   ```bash
+   docker login
+   ```
+3. Push the image to Docker Hub:
+   ```bash
+   docker push <dockerhub-username>/format-dev-tools:latest
+   ```
+
+### Deploy to Azure Container Apps
+
+1. Make sure you have an Azure Container Apps environment and resource group ready.
+2. Create the container app using your Docker Hub image:
+   ```bash
+   az containerapp create \
+     --name format-dev-tools \
+     --resource-group <resource-group> \
+     --environment <container-app-environment> \
+     --image <dockerhub-username>/format-dev-tools:latest \
+     --target-port 80 \
+     --ingress external
+   ```
+3. To redeploy after changes, rebuild and push the image, then update the container app:
+   ```bash
+   docker build -t <dockerhub-username>/format-dev-tools:latest .
+   docker push <dockerhub-username>/format-dev-tools:latest
+   az containerapp update \
+     --name format-dev-tools \
+     --resource-group <resource-group> \
+     --image <dockerhub-username>/format-dev-tools:latest
+   ```
+
+> If your Docker Hub repository is private, add registry credentials to Azure Container Apps with `--registry-server`, `--registry-username`, and `--registry-password`.
